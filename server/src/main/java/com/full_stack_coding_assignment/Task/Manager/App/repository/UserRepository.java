@@ -1,8 +1,8 @@
 package com.full_stack_coding_assignment.Task.Manager.App.repository;
 
 import com.full_stack_coding_assignment.Task.Manager.App.entity.User;
+import com.full_stack_coding_assignment.Task.Manager.App.enums.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findFirstByEmail(String username);
+    Optional<User> findByUserRole(UserRole userRole);
 }
