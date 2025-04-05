@@ -1,5 +1,6 @@
 package com.full_stack_coding_assignment.Task.Manager.App.entity;
 
+import com.full_stack_coding_assignment.Task.Manager.App.dto.UserDto;
 import com.full_stack_coding_assignment.Task.Manager.App.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -26,19 +27,6 @@ public class User implements UserDetails {
     private String password;
 
     private UserRole userRole;
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    public void setPassword(String password) {
-        this.password = password;
-    }
-    public void setUserRole(UserRole userRole) {
-        this.userRole = userRole;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -74,5 +62,14 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public UserDto getUserDto(){
+        UserDto userDto = new UserDto();
+        userDto.setId(id);
+        userDto.setName(name);
+        userDto.setEmail(email);
+        userDto.setUserRole(userRole);
+        return userDto;
     }
 }
