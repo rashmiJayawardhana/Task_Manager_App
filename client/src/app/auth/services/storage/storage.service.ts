@@ -20,13 +20,13 @@ export class StorageService {
   }
 
   static getToken(): string | null {
-    return localStorage.getItem(TOKEN); // Return type is string | null
+    return localStorage.getItem(TOKEN); 
   }
 
   static getUser(): any {
     const user = localStorage.getItem(USER);
     if (user === null) {
-      return null; // Return null if no user is found
+      return null; 
     }
     return JSON.parse(user); // Safe to parse since we checked for null
   }

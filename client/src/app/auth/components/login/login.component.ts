@@ -45,7 +45,7 @@ export class LoginComponent {
     private authService: AuthService,
     private snackbar: MatSnackBar,
     private router: Router,
-    private storageService: StorageService // Inject StorageService
+    private storageService: StorageService 
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
