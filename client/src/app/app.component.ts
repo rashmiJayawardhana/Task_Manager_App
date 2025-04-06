@@ -12,8 +12,8 @@ import { MatButtonModule } from '@angular/material/button';   // For mat-button
     RouterLink,
     RouterLinkActive,
     CommonModule,
-    MatToolbarModule,  // Add this
-    MatButtonModule,   // Add this
+    MatToolbarModule,  
+    MatButtonModule,   
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],

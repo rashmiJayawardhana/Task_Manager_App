@@ -1,4 +1,16 @@
-/* You can add global styles to this file, and also import other style files */
+// Basic global styles
+html, body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: #006270; 
+}
 
+// Ensure input text is black globally (to test if component styles fail)
+.mat-form-field-appearance-outline .mat-input-element {
+  color: #000000 !important;
+}
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

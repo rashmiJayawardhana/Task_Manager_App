@@ -1,0 +1,91 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  mat-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background: #f7f9f8f6;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    @media screen and (max-width: 500px){
+        max-width: 90%;     
+    }
+  }
+
+  mat-card-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  mat-form-field {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  // Add these specific overrides for the cyan/orange theme
+::ng-deep mat-form-field {
+    .mat-form-field-infix {
+        .mat-input-element {
+            color: #000000 !important; // Black text for input
+        }
+    }
+
+    // Placeholder text
+    .mat-form-field-label {
+        color: rgba(0, 0, 0, 0.6) !important; // Darker gray for placeholder
+    }
+
+    // Floating label when focused
+    &.mat-focused {
+        .mat-form-field-label {
+            color: #000000 !important; // Black when focused
+        }
+    }
+
+    // Outline border color when focused (optional, to match your theme)
+    &.mat-focused {
+        .mat-form-field-outline {
+            color: #00E0c7 !important; // Matches your signup button color
+        }
+    }
+}
+  
+  button {
+    width: 100%;
+  }
+
+  .signup-button {
+    background: #00E0c7 !important; /* Bright cyan background */
+    color: #000000 !important; /* Black text */
+  }
+
+  .signup-button[disabled] {
+    background: #b0e8df !important; /* Lighter shade of #00E0c7 for disabled state */
+    color: #666666 !important; /* Gray text for disabled state */
+    opacity: 0.6;
+  }
+
+  @media screen and (max-width: 500px){
+    mat-card-title {
+        font-size: 20px;
+    }
+    mat-form-field {
+        margin-bottom: 10px;
+    }     
+  }
+
+  .error-snackbar {
+    background-color: #f44336 !important;
+  }
