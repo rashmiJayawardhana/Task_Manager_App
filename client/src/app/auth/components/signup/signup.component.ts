@@ -71,8 +71,8 @@ export class SignupComponent {
       this.authService.signup(this.signupForm.value).subscribe({
         next: (res: SignupResponse) => {
           if (res.id != null) {
-            console.log('Signup Input Data:', this.signupForm.value); // Log input data
-            console.log('Signup Successful! User ID:', res.id); // Log success message
+            console.log('Signup Input Data:', this.signupForm.value); 
+            console.log('Signup Successful! User ID:', res.id); 
             this.snackbar.open('Signup successful', 'Close', {
               duration: 5000,
               panelClass: ['success-snackbar'],

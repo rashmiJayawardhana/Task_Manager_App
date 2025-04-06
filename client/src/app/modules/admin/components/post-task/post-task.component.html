@@ -1,0 +1,10 @@
+<!-- post-task.component.html -->
+<div>
+    <h2>Post Task</h2>
+    <h3>Employees</h3>
+    <ul>
+      <li *ngFor="let user of users">
+        {{ user.name }} ({{ user.email }})
+      </li>
+    </ul>
+  </div>

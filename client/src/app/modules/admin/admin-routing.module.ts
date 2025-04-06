@@ -5,9 +5,14 @@ const routes: Routes = [
   {
     path: 'dashboard',
     loadComponent: () =>
-      import('./components/dashboard/dashboard.component').then(m => m.DashboardComponent)
+      import('./components/dashboard/dashboard.component').then((m) => m.DashboardComponent),
   },
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+  {
+    path: 'task',
+    loadComponent: () =>
+      import('./components/post-task/post-task.component').then((m) => m.PostTaskComponent),
+  },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 ];
 
 @NgModule({

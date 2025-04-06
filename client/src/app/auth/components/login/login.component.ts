@@ -46,7 +46,7 @@ export class LoginComponent {
     private authService: AuthService,
     private snackbar: MatSnackBar,
     private router: Router,
-    private storageService: StorageService // Already injected
+    private storageService: StorageService 
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -68,8 +68,8 @@ export class LoginComponent {
             id: res.userId,
             role: res.userRole,
           };
-          this.storageService.saveUser(user); // Use instance method
-          this.storageService.saveToken(res.jwt); // Use instance method
+          this.storageService.saveUser(user); 
+          this.storageService.saveToken(res.jwt); 
 
           console.log('Login Input Data:', this.loginForm.value);
           console.log('Login Successful! User ID:', res.userId, 'Role:', res.userRole);

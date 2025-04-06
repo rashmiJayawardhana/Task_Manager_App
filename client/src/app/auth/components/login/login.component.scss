@@ -40,13 +40,13 @@
   }
 
   .login-button {
-    background: #00E0c7 !important; /* Bright cyan background */
-    color: #000000 !important; /* Black text */
+    background: #00E0c7 !important; 
+    color: #000000 !important;
   }
 
   .login-button[disabled] {
-    background: #b0e8df !important; /* Lighter shade of #00E0c7 for disabled state */
-    color: #666666 !important; /* Gray text for disabled state */
+    background: #b0e8df !important; 
+    color: #666666 !important; 
     opacity: 0.6;
   }
 

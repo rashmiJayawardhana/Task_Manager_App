@@ -29,13 +29,13 @@ export class StorageService {
   saveToken(token: string): void {
     window.localStorage.removeItem(TOKEN);
     window.localStorage.setItem(TOKEN, token);
-    this.updateLoginState(); // Update state after saving token
+    this.updateLoginState(); 
   }
 
   saveUser(user: any): void {
     window.localStorage.removeItem(USER);
     window.localStorage.setItem(USER, JSON.stringify(user));
-    this.updateLoginState(); // Update state after saving user
+    this.updateLoginState(); 
   }
 
   getToken(): string | null {
