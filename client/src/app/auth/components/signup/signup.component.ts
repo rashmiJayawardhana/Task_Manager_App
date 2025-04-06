@@ -49,7 +49,7 @@ export class SignupComponent {
       {
         name: ['', Validators.required],
         email: ['', [Validators.required, Validators.email]],
-        password: ['', [Validators.required, Validators.minLength(6)]],
+        password: ['', [Validators.required, Validators.minLength(5)]],
         confirmPassword: ['', Validators.required],
       },
       { validators: this.passwordMatchValidator }

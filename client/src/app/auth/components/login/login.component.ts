@@ -6,7 +6,17 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterLink } from '@angular/router';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth/auth.service';
+
+// Define the expected response type from the API
+interface LoginResponse {
+  jwt: string;
+  userId: number | string;
+  userRole: string;
+  message?: string; // For error messages
+}
 
 @Component({
   selector: 'app-login',
@@ -19,7 +29,8 @@ import { RouterLink } from '@angular/router';
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
-    RouterLink,
+    RouterModule,
+    MatSnackBarModule,
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
@@ -28,10 +39,15 @@ export class LoginComponent {
   loginForm!: FormGroup;
   hidePassword = true;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private snackbar: MatSnackBar,
+    private router: Router
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(5)]],
     });
   }
 
@@ -41,15 +57,45 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      console.log('Form Submitted:', this.loginForm.value);
-      // Simulate an API call or submission logic here
-      // For example: this.authService.login(this.loginForm.value).subscribe(...);
+      this.authService.login(this.loginForm.value).subscribe({
+        next: (res: LoginResponse) => {
+          // Only handle the success case here
+          if (res.jwt && res.userId != null) {
+            console.log('Login Input Data:', this.loginForm.value);
+            console.log('Login Successful! User ID:', res.userId, 'Role:', res.userRole);
 
-      this.loginForm.reset();
-      this.loginForm.patchValue({
-        email: '',
-        password: '',
+            // Store the JWT token
+            localStorage.setItem('jwt', res.jwt);
+
+            // Show success message
+            this.snackbar.open('Login successful', 'Close', {
+              duration: 5000,
+              panelClass: ['success-snackbar'],
+            });
+
+            // Redirect to dashboard
+            this.router.navigateByUrl('/dashboard');
+          }
+        },
+        error: (err) => {
+          console.error('Login error:', err);
+          let errorMessage = 'Login failed. Please try again.';
+          if (err.status === 401) {
+            errorMessage = 'Invalid email or password. Please try again.';
+          } else if (err.status === 0) {
+            errorMessage = 'Network error. Please check your connection.';
+          } else if (err.error?.message) {
+            errorMessage = err.error.message;
+          }
+          this.snackbar.open(errorMessage, 'Close', {
+            duration: 5000,
+            panelClass: ['error-snackbar'],
+          });
+        },
       });
+
+      // Reset the form
+      this.loginForm.reset();
     }
   }
 }
