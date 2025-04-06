@@ -7,3 +7,13 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
   background: #022b29; 
 }
+
+.success-snackbar {
+  background-color: #4caf50;
+  color: white;
+}
+
+.error-snackbar {
+  background-color: #f44336;
+  color: white;
+}
