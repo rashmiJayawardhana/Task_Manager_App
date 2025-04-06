@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 const TOKEN = 'token';
 const USER = 'user';
@@ -7,40 +8,58 @@ const USER = 'user';
   providedIn: 'root',
 })
 export class StorageService {
+  private loginState$ = new BehaviorSubject<{ isAdmin: boolean; isEmployee: boolean }>({
+    isAdmin: this.isAdminLoggedIn(),
+    isEmployee: this.isEmployeeLoggedIn(),
+  });
+
   constructor() {}
 
-  static saveToken(token: string): void {
+  private updateLoginState() {
+    this.loginState$.next({
+      isAdmin: this.isAdminLoggedIn(),
+      isEmployee: this.isEmployeeLoggedIn(),
+    });
+  }
+
+  getLoginState(): Observable<{ isAdmin: boolean; isEmployee: boolean }> {
+    return this.loginState$.asObservable();
+  }
+
+  saveToken(token: string): void {
     window.localStorage.removeItem(TOKEN);
     window.localStorage.setItem(TOKEN, token);
+    this.updateLoginState(); // Update state after saving token
   }
 
-  static saveUser(user: any): void {
+  saveUser(user: any): void {
     window.localStorage.removeItem(USER);
     window.localStorage.setItem(USER, JSON.stringify(user));
+    this.updateLoginState(); // Update state after saving user
   }
 
-  static getToken(): string | null {
-    return localStorage.getItem(TOKEN); 
+  getToken(): string | null {
+    return localStorage.getItem(TOKEN);
   }
 
-  static getUser(): any {
+  getUser(): any {
     const user = localStorage.getItem(USER);
     if (user === null) {
-      return null; 
+      return null;
     }
-    return JSON.parse(user); // Safe to parse since we checked for null
+    return JSON.parse(user);
   }
 
-  static getUserRole(): string {
+  getUserRole(): string {
     const user = this.getUser();
     if (user == null) {
       return '';
     }
-    // Normalize the role to uppercase to handle case mismatches
-    return user.role ? String(user.role).toUpperCase() : '';
+    const role = user.role ? String(user.role).toUpperCase() : '';
+    return role === 'ADMIN' || role === 'USER' ? 'ADMIN' : role;
   }
 
-  static isAdminLoggedIn(): boolean {
+  isAdminLoggedIn(): boolean {
     if (this.getToken() === null) {
       return false;
     }
@@ -48,7 +67,7 @@ export class StorageService {
     return role === 'ADMIN';
   }
 
-  static isEmployeeLoggedIn(): boolean {
+  isEmployeeLoggedIn(): boolean {
     if (this.getToken() === null) {
       return false;
     }
@@ -56,16 +75,17 @@ export class StorageService {
     return role === 'EMPLOYEE';
   }
 
-  static getUserId(): string {
+  getUserId(): string {
     const user = this.getUser();
     if (user == null) {
       return '';
     }
-    return user.id || ''; // Ensure id is a string, fallback to empty string
+    return user.id || '';
   }
 
-  static logout(): void {
+  logout(): void {
     window.localStorage.removeItem(TOKEN);
     window.localStorage.removeItem(USER);
+    this.updateLoginState();
   }
 }
