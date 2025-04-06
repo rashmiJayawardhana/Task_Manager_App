@@ -1,9 +1,30 @@
-<div>
+<!-- Show the default navbar when the user is not logged in -->
+<div *ngIf="!isAdminLoggedIn && !isEmployeeLoggedIn">
   <mat-toolbar color="primary" class="navbar">
     <span class="navbar-brand">Task Management System</span>
     <span class="spacer"></span>
     <button mat-button routerLink="/signup" routerLinkActive="active">Register</button>
     <button mat-button routerLink="/login" routerLinkActive="active">Login</button>
+  </mat-toolbar>
+</div>
+
+<!-- Admin navbar -->
+<div *ngIf="isAdminLoggedIn">
+  <mat-toolbar color="primary" class="navbar">
+    <span class="navbar-brand">Admin</span>
+    <span class="spacer"></span>
+    <button mat-button routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</button>
+    <button mat-button (click)="logout()">Logout</button>
+  </mat-toolbar>
+</div>
+
+<!-- Employee navbar -->
+<div *ngIf="isEmployeeLoggedIn">
+  <mat-toolbar color="primary" class="navbar">
+    <span class="navbar-brand">Employee</span>
+    <span class="spacer"></span>
+    <button mat-button routerLink="/employee/dashboard" routerLinkActive="active">Dashboard</button>
+    <button mat-button (click)="logout()">Logout</button>
   </mat-toolbar>
 </div>
 
