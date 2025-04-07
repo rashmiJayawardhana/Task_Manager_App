@@ -1,30 +1,34 @@
-<div class="task-list">
+<div class="dashboard-header">
+    <h1>Employee Dashboard</h1>
+    <button mat-raised-button color="primary" (click)="getTasks()" [disabled]="isLoading">
+      <mat-icon>refresh</mat-icon> Refresh Tasks
+    </button>
+  </div>
+  
+  <div class="task-list">
     <div class="loading" *ngIf="isLoading">
+      <mat-spinner diameter="40"></mat-spinner>
       <p>Loading tasks...</p>
     </div>
-
+  
     <div class="empty-state" *ngIf="!isLoading && listOfTasks?.length === 0">
       <p>No tasks available.</p>
     </div>
-
+  
     <mat-card class="task-card" *ngFor="let task of listOfTasks">
       <div class="task-details">
         <h2 class="task-name">{{ task.title }}</h2>
         <p class="task-description">{{ task.description }}</p>
-
+  
         <mat-divider></mat-divider>
         <div class="task-info">
           <div class="info-row">
             <span class="info-label">Due Date:</span>
-            <span class="info-value">
-                {{ task.dueDate | date: 'MMM d, y' }}
-            </span>
+            <span class="info-value">{{ task.dueDate | date: 'MMM d, y' }}</span>
           </div>
           <div class="info-row">
             <span class="info-label">Employee:</span>
-            <span class="info-value">
-                {{ task.employeeName }}
-            </span>
+            <span class="info-value">{{ task.employeeName }}</span>
           </div>
           <div class="info-row">
             <span class="info-label">Priority:</span>
@@ -34,11 +38,23 @@
           </div>
           <div class="info-row">
             <span class="info-label">Status:</span>
-            <span class="info-value" [ngClass]="getStatusClass(task.taskStatus)">
-              {{ task.taskStatus }}
-            </span>
+            <div class="status-container">
+              <mat-select
+                class="status-select"
+                [ngClass]="getStatusClass(task.taskStatus)"
+                [value]="task.taskStatus"
+                (selectionChange)="updateTaskStatus(task.id, $event.value)"
+                [disabled]="isUpdating[task.id]"
+                matTooltip="Select a new status for this task"
+              >
+                <mat-option *ngFor="let status of listOfTaskStatuses" [value]="status">
+                  {{ status }}
+                </mat-option>
+              </mat-select>
+              <mat-spinner diameter="20" *ngIf="isUpdating[task.id]"></mat-spinner>
+            </div>
           </div>
         </div>
       </div>
     </mat-card>
-</div>
+  </div>

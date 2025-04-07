@@ -15,11 +15,19 @@ export class EmployeeService {
     private storageService: StorageService
   ) {}
 
-    getEmployeeTasksById(): Observable<TaskDto[]> {
-        return this.http.get<TaskDto[]>(BASE_URL + "api/employee/tasks", {
-          headers: this.createAuthorizationHeader(),
-        });
-    }
+  getEmployeeTasksById(): Observable<TaskDto[]> {
+      return this.http.get<TaskDto[]>(BASE_URL + "api/employee/tasks", {
+        headers: this.createAuthorizationHeader(),
+      });
+  }
+
+  updateTaskStatus(id: number, status: string): Observable<TaskDto> {
+    return this.http.patch<TaskDto>(
+      `${BASE_URL}api/employee/task/${id}/status/${status}`,
+      {},
+      { headers: this.createAuthorizationHeader() }
+    );
+  }
 
   private createAuthorizationHeader(): HttpHeaders {
     const token = this.storageService.getToken();
