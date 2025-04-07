@@ -45,6 +45,9 @@
   
         <mat-divider></mat-divider>
         <div class="actions">
+          <button mat-icon-button color="accent" class="view-button" [routerLink]="['/admin/task-details', task.id]">
+            <mat-icon>visibility</mat-icon>
+          </button> 
           <button mat-icon-button color="primary" class="update-button" [routerLink]="['/admin/task', task.id, 'update']">
             <mat-icon>edit</mat-icon>
           </button>

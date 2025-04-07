@@ -1,0 +1,32 @@
+<div class="task-list" *ngIf="taskData">
+    <mat-card class="task-card">
+      <div class="task-details">
+        <h2 class="task-name">{{ taskData.title }}</h2>
+        <p class="task-description">{{ taskData.description }}</p>
+  
+        <mat-divider></mat-divider>
+        <div class="task-info">
+          <div class="info-row">
+            <span class="info-label">Due Date:</span>
+            <span class="info-value">{{ taskData.dueDate | date: 'MMM d, y' }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Employee:</span>
+            <span class="info-value">{{ taskData.employeeName }}</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Priority:</span>
+            <span class="info-value">
+              {{ taskData.priority }}
+            </span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Status:</span>
+            <span class="info-value">
+              {{ taskData.taskStatus }}
+            </span>
+          </div>
+        </div> 
+      </div>
+    </mat-card>
+</div>

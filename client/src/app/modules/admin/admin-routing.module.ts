@@ -17,6 +17,11 @@ const routes: Routes = [
     loadComponent: () =>
       import('./components/update-task/update-task.component').then((m) => m.UpdateTaskComponent),
   },
+  { 
+    path: "task-details/:id", 
+    loadComponent: () =>
+      import('./components/view-task-details/view-task-details.component').then((m) => m.ViewTaskDetailsComponent),
+  },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 ];
 
