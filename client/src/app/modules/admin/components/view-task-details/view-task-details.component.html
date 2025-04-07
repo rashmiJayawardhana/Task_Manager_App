@@ -1,32 +1,100 @@
-<div class="task-list" *ngIf="taskData">
-    <mat-card class="task-card">
-      <div class="task-details">
-        <h2 class="task-name">{{ taskData.title }}</h2>
-        <p class="task-description">{{ taskData.description }}</p>
+<div class="task-details-container">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading task details...</p>
+    </div>
   
-        <mat-divider></mat-divider>
-        <div class="task-info">
-          <div class="info-row">
-            <span class="info-label">Due Date:</span>
-            <span class="info-value">{{ taskData.dueDate | date: 'MMM d, y' }}</span>
+    <!-- Error State -->
+    <div *ngIf="error && !isLoading" class="error">
+      <mat-icon color="warn">error</mat-icon>
+      <p>{{ error }}</p>
+    </div>
+  
+    <!-- Task Details -->
+    <div *ngIf="taskData && !isLoading && !error">
+      <mat-card class="task-card">
+        <div class="task-details">
+          <h2 class="task-name">{{ taskData.title }}</h2>
+          <p class="task-description">{{ taskData.description || 'No description provided' }}</p>
+  
+          <mat-divider></mat-divider>
+          <div class="task-info">
+            <div class="info-row">
+              <span class="info-label">Due Date:</span>
+              <span class="info-value">{{ taskData.dueDate | date: 'MMM d, y' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Employee:</span>
+              <span class="info-value">{{ taskData.employeeName }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Priority:</span>
+              <span class="info-value" [ngClass]="{
+                'priority-high': taskData.priority === 'HIGH',
+                'priority-medium': taskData.priority === 'MEDIUM',
+                'priority-low': taskData.priority === 'LOW',
+                'priority-unknown': taskData.priority !== 'HIGH' && taskData.priority !== 'MEDIUM' && taskData.priority !== 'LOW'
+              }">
+                {{ taskData.priority }}
+              </span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Status:</span>
+              <span class="info-value" [ngClass]="{
+                'status-completed': taskData.taskStatus === 'COMPLETED',
+                'status-inprogress': taskData.taskStatus === 'INPROGRESS',
+                'status-pending': taskData.taskStatus === 'PENDING',
+                'status-deferred': taskData.taskStatus === 'DEFERRED',
+                'status-cancelled': taskData.taskStatus === 'CANCELLED',
+                'status-unknown': !['COMPLETED', 'INPROGRESS', 'PENDING', 'DEFERRED', 'CANCELLED'].includes(taskData.taskStatus)
+              }">
+                {{ taskData.taskStatus }}
+              </span>
+            </div>
           </div>
-          <div class="info-row">
-            <span class="info-label">Employee:</span>
-            <span class="info-value">{{ taskData.employeeName }}</span>
+        </div>
+      </mat-card>
+  
+      <!-- Comment Form -->
+      <mat-card class="comment-card">
+        <mat-card-content>
+          <h4>Publish Your Comment</h4>
+          <form [formGroup]="commentForm">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Write a comment...</mat-label>
+              <textarea matInput formControlName="content" rows="3"></textarea>
+              <mat-error *ngIf="commentForm.get('content')?.hasError('required')">
+                Comment content is required
+              </mat-error>
+            </mat-form-field>
+            <button mat-raised-button color="primary" class="submit-btn" [disabled]="!commentForm.valid" (click)="publishComment()">
+              Publish Comment
+            </button>
+          </form>
+        </mat-card-content>
+      </mat-card>
+  
+      <!-- Comments List -->
+      <mat-card class="comments-list-card" *ngIf="comments.length > 0">
+        <mat-card-content>
+          <h4>Comments ({{ comments.length }})</h4>
+          <div class="comment" *ngFor="let comment of comments">
+            <div class="comment-header">
+              <span class="comment-author">{{ comment.postedBy }}</span>
+              <span class="comment-date">{{ comment.createdAt | date: 'MMM d, y, h:mm a' }}</span>
+            </div>
+            <p class="comment-content">{{ comment.content }}</p>
+            <mat-divider></mat-divider>
           </div>
-          <div class="info-row">
-            <span class="info-label">Priority:</span>
-            <span class="info-value">
-              {{ taskData.priority }}
-            </span>
-          </div>
-          <div class="info-row">
-            <span class="info-label">Status:</span>
-            <span class="info-value">
-              {{ taskData.taskStatus }}
-            </span>
-          </div>
-        </div> 
-      </div>
-    </mat-card>
-</div>
+        </mat-card-content>
+      </mat-card>
+  
+      <!-- No Comments Message -->
+      <mat-card class="no-comments-card" *ngIf="comments.length === 0">
+        <mat-card-content>
+          <p class="no-comments">No comments yet. Be the first to comment!</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>

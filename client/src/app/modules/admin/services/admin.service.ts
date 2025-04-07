@@ -58,6 +58,22 @@ export class AdminService {
     });
   }
 
+  createComment(id: number, content: string): Observable<any> {
+    const params = {
+      content: content
+    }
+    return this.http.post(`${BASE_URL}api/admin/task/comment/${id}`, null, {
+      params: params,
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
+  getCommentsByTaskId(id: number): Observable<any[]> {
+    return this.http.get<any[]>(`${BASE_URL}api/admin/task/${id}/comments`, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
   private createAuthorizationHeader(): HttpHeaders {
     const token = this.storageService.getToken();
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);

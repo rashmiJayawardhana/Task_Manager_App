@@ -146,6 +146,11 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public CommentDto createComment(Long taskId, String content) {
+        if (content == null || content.trim().isEmpty()) {
+            logger.error("Comment content cannot be empty for task ID: {}", taskId);
+            throw new IllegalArgumentException("Comment content cannot be empty");
+        }
+
         Optional<Task> optionalTask = taskRepository.findById(taskId);
         User user = jwtUtil.getLoggedInUser();
         if (optionalTask.isEmpty()) {
@@ -164,5 +169,20 @@ public class AdminServiceImpl implements AdminService {
         comment.setUser(user);
         Comment savedComment = commentRepository.save(comment);
         return commentMapper.toCommentDto(savedComment);
+    }
+
+    @Override
+    public List<CommentDto> getCommentsByTaskId(Long taskId) {
+        logger.info("Fetching comments for task ID: {}", taskId);
+        Optional<Task> optionalTask = taskRepository.findById(taskId);
+        if (optionalTask.isEmpty()) {
+            logger.error("Task with ID {} not found while fetching comments", taskId);
+            throw new TaskNotFoundException("Task with ID " + taskId + " not found");
+        }
+        return commentRepository.findByTaskId(taskId)
+                .stream()
+                .sorted(Comparator.comparing(Comment::getCreatedAt).reversed())
+                .map(commentMapper::toCommentDto)
+                .collect(Collectors.toList());
     }
 }
