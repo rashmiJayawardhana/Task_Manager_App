@@ -7,4 +7,4 @@ export interface TaskDto {
     taskStatus: string | null; 
     employeeId: number;
     employeeName: string;
-  }
+}

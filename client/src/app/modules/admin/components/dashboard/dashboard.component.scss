@@ -1,3 +1,19 @@
+.search-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+
+    .search-input {
+        width: 300px;
+        margin-right: 15px;
+
+        input {
+            padding-right: 40px;
+        }
+    }
+}
+
 .task-list {
     max-width: 1200px;
     margin: 20px auto;
@@ -7,131 +23,141 @@
     gap: 20px;
     justify-content: space-between;
     min-height: 37vh;
-  
+
     .loading,
     .empty-state {
-      text-align: center;
-      width: 100%;
-      color: #666;
-      font-size: 18px;
-      padding: 20px;
-    }
-  
-    .task-card {
-      width: calc(33.33% - 20px);
-      margin-bottom: 20px;
-      max-width: 350px;
-      background: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-      transition: transform 0.2s ease-in-out;
-  
-      &:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-      }
-  
-      .task-details {
+        text-align: center;
+        width: 100%;
+        color: #666;
+        font-size: 18px;
         padding: 20px;
-  
-        .task-name {
-          font-size: 20px;
-          font-weight: 600;
-          color: #333;
-          margin-bottom: 10px;
-        }
-  
-        .task-description {
-          font-size: 14px;
-          color: #666;
-          margin-bottom: 15px;
-          line-height: 1.5;
-        }
-  
-        .task-info {
-          margin-top: 15px;
-        
-          .info-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 14px;
-  
-            .info-label {
-              font-weight: 500;
-              color: #555;
-            }
-  
-            .info-value {
-              color: #333;
-              font-weight: bold;
-  
-              &.priority-high {
-                color: #d32f2f; // Red for HIGH priority
-                font-weight: 600;
-              }
-  
-              &.priority-medium {
-                color: #f57c00; // Orange for MEDIUM priority
-                font-weight: 600;
-              }
-  
-              &.priority-low {
-                color: #388e3c; // Green for LOW priority
-                font-weight: 600;
-              }
-  
-              &.priority-unknown {
-                color: #999; // Gray for unknown priority
-                font-weight: 600;
-              }
-  
-              &.status-completed {
-                color: #388e3c; // Green for COMPLETED status
-                font-weight: 600;
-              }
-  
-              &.status-inprogress {
-                color: #0288d1; // Blue for INPROGRESS status
-                font-weight: 600;
-              }
-  
-              &.status-pending {
-                color: #f57c00; // Orange for PENDING status
-                font-weight: 600;
-              }
-  
-              &.status-unknown {
-                color: #999; // Gray for unknown status
-                font-weight: 600;
-              }
-            }
-          }
-
-          .actions {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 10px;
-
-            .update-button {
-                margin-right: 10px;
-            }
-
-            .view-button {
-                margin-right: 10px;
-            }
-          }
-        }
-      }
     }
-  }
-  
-  @media (max-width: 600px) {
+
+    .task-card {
+        width: calc(33.33% - 20px);
+        margin-bottom: 20px;
+        max-width: 350px;
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        transition: transform 0.2s ease-in-out;
+
+        &:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .task-details {
+            padding: 20px;
+
+            .task-name {
+                font-size: 20px;
+                font-weight: 600;
+                color: #333;
+                margin-bottom: 10px;
+            }
+
+            .task-description {
+                font-size: 14px;
+                color: #666;
+                margin-bottom: 15px;
+                line-height: 1.5;
+            }
+
+            .task-info {
+                margin-top: 15px;
+
+                .info-row {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 10px;
+                    font-size: 14px;
+
+                    .info-label {
+                        font-weight: 500;
+                        color: #555;
+                    }
+
+                    .info-value {
+                        color: #333;
+                        font-weight: bold;
+
+                        &.priority-high {
+                            color: #d32f2f; // Red for HIGH priority
+                            font-weight: 600;
+                        }
+
+                        &.priority-medium {
+                            color: #f57c00; // Orange for MEDIUM priority
+                            font-weight: 600;
+                        }
+
+                        &.priority-low {
+                            color: #388e3c; // Green for LOW priority
+                            font-weight: 600;
+                        }
+
+                        &.priority-unknown {
+                            color: #999; // Gray for unknown priority
+                            font-weight: 600;
+                        }
+
+                        &.status-completed {
+                            color: #388e3c; // Green for COMPLETED status
+                            font-weight: 600;
+                        }
+
+                        &.status-inprogress {
+                            color: #0288d1; // Blue for INPROGRESS status
+                            font-weight: 600;
+                        }
+
+                        &.status-pending {
+                            color: #f57c00; // Orange for PENDING status
+                            font-weight: 600;
+                        }
+
+                        &.status-deferred {
+                            color: #f57c00; // Orange for DEFERRED status
+                            font-weight: 600;
+                        }
+
+                        &.status-cancelled {
+                            color: #d32f2f; // Red for CANCELLED status
+                            font-weight: 600;
+                        }
+
+                        &.status-unknown {
+                            color: #999; // Gray for unknown status
+                            font-weight: 600;
+                        }
+                    }
+                }
+
+                .actions {
+                    display: flex;
+                    justify-content: flex-end;
+                    margin-top: 10px;
+
+                    .update-button {
+                        margin-right: 10px;
+                    }
+
+                    .delete-button {
+                        margin-right: 10px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 600px) {
     .task-list {
-      padding: 10px;
-  
-      .task-card {
-        max-width: 100%;
-      }
+        padding: 10px;
+
+        .task-card {
+            max-width: 100%;
+        }
     }
-  }
+}

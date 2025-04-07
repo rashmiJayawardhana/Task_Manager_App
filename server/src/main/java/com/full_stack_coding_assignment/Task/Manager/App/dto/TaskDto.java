@@ -1,5 +1,6 @@
 package com.full_stack_coding_assignment.Task.Manager.App.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.full_stack_coding_assignment.Task.Manager.App.enums.TaskStatus;
 import lombok.Data;
 
@@ -13,6 +14,7 @@ public class TaskDto {
 
     private String description;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dueDate;
 
     private String priority;

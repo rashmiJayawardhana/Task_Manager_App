@@ -12,6 +12,11 @@ const routes: Routes = [
     loadComponent: () =>
       import('./components/post-task/post-task.component').then((m) => m.PostTaskComponent),
   },
+  { 
+    path: "task/:id/update", 
+    loadComponent: () =>
+      import('./components/update-task/update-task.component').then((m) => m.UpdateTaskComponent),
+  },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 ];
 

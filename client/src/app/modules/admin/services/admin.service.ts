@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { StorageService } from '../../../auth/services/storage/storage.service';
 import { Employee } from '../../../shared/models/employee.model';
-import { Task } from '../../../shared/models/task.model';
 import { TaskDto } from '../../../shared/models/task-dto.model';
 
 const BASE_URL = "http://localhost:8080/";
@@ -23,7 +22,7 @@ export class AdminService {
     });
   }
 
-  postTask(task: Task): Observable<TaskDto> {
+  postTask(task: TaskDto): Observable<TaskDto> {
     return this.http.post<TaskDto>(BASE_URL + "api/admin/task", task, {
       headers: this.createAuthorizationHeader(),
     });
@@ -31,6 +30,30 @@ export class AdminService {
 
   getAllTasks(): Observable<TaskDto[]> {
     return this.http.get<TaskDto[]>(BASE_URL + "api/admin/tasks", {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
+  deleteTask(id: number): Observable<void> {
+    return this.http.delete<void>(`${BASE_URL}api/admin/task/${id}`, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
+  getTaskById(id: number): Observable<TaskDto> {
+    return this.http.get<TaskDto>(`${BASE_URL}api/admin/task/${id}`, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
+  updateTask(id: number, task: TaskDto): Observable<TaskDto> {
+    return this.http.put<TaskDto>(`${BASE_URL}api/admin/task/${id}`, task, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
+  searchTask(title: string): Observable<TaskDto[]> {
+    return this.http.get<TaskDto[]>(`${BASE_URL}api/admin/tasks/search/${title}`, {
       headers: this.createAuthorizationHeader(),
     });
   }

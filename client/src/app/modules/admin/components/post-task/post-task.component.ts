@@ -11,7 +11,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AdminService } from '../../services/admin.service';
 import { Employee } from '../../../../shared/models/employee.model';
-import { Task } from '../../../../shared/models/task.model';
+import { TaskDto } from '../../../../shared/models/task-dto.model'; 
 import { Router } from '@angular/router';
 
 @Component({
@@ -76,7 +76,7 @@ export class PostTaskComponent implements OnInit {
   postTask() {
     if (this.taskForm.valid) {
       this.isLoading = true;
-      const task: Task = {
+      const task: TaskDto = { 
         ...this.taskForm.value,
         dueDate: this.taskForm.value.dueDate.toISOString().split('T')[0], // Format as YYYY-MM-DD
         taskStatus: 'INPROGRESS', // Match backend default
