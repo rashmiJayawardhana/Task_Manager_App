@@ -1,62 +1,63 @@
 <div class="container">
-    <h2>Post Task</h2>
-    <mat-card>
-      <mat-card-content>
-        <form [formGroup]="taskForm" (ngSubmit)="postTask()">
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Title</mat-label>
-            <input matInput type="text" formControlName="title" placeholder="Title" />
-            <mat-error *ngIf="taskForm.get('title')?.hasError('required') && taskForm.get('title')?.touched">
-              This field is required!
-            </mat-error>
-          </mat-form-field>
-  
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Description</mat-label>
-            <textarea matInput formControlName="description" placeholder="Description"></textarea>
-            <mat-error *ngIf="taskForm.get('description')?.hasError('required') && taskForm.get('description')?.touched">
-              This field is required!
-            </mat-error>
-          </mat-form-field>
-  
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Due Date</mat-label>
-            <input matInput [matDatepicker]="dueDatePicker" formControlName="dueDate" placeholder="Choose a due date">
-            <mat-datepicker-toggle matSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
-            <mat-datepicker #dueDatePicker></mat-datepicker>
-            <mat-error *ngIf="taskForm.get('dueDate')?.hasError('required') && taskForm.get('dueDate')?.touched">
-              This field is required!
-            </mat-error>
-          </mat-form-field>
-  
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Select Priority</mat-label>
-            <mat-select formControlName="priority" name="priority">
-              <mat-option *ngFor="let priority of listOfPriorities" [value]="priority">
-                {{ priority }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="taskForm.get('priority')?.hasError('required') && taskForm.get('priority')?.touched">
-              This field is required!
-            </mat-error>
-          </mat-form-field>
-  
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Select Employee</mat-label>
-            <mat-select formControlName="employeeId" name="employeeId">
-              <mat-option *ngFor="let employee of listOfEmployees" [value]="employee.id">
-                {{ employee.name }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="taskForm.get('employeeId')?.hasError('required') && taskForm.get('employeeId')?.touched">
-              This field is required!
-            </mat-error>
-          </mat-form-field>
-  
-          <button mat-raised-button class="post-button" type="submit" [disabled]="taskForm.invalid">
-            Post Task
-          </button>
-        </form>
-      </mat-card-content>
-    </mat-card>
-  </div>
+  <h2>Post Task</h2>
+  <mat-card>
+    <mat-card-content>
+      <form [formGroup]="taskForm" (ngSubmit)="postTask()">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Title</mat-label>
+          <input matInput type="text" formControlName="title" placeholder="Title" />
+          <mat-error *ngIf="taskForm.get('title')?.hasError('required') && taskForm.get('title')?.touched">
+            This field is required!
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" placeholder="Description"></textarea>
+          <mat-error *ngIf="taskForm.get('description')?.hasError('required') && taskForm.get('description')?.touched">
+            This field is required!
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Due Date</mat-label>
+          <input matInput [matDatepicker]="dueDatePicker" formControlName="dueDate" placeholder="Choose a due date">
+          <mat-datepicker-toggle matSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #dueDatePicker></mat-datepicker>
+          <mat-error *ngIf="taskForm.get('dueDate')?.hasError('required') && taskForm.get('dueDate')?.touched">
+            This field is required!
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Select Priority</mat-label>
+          <mat-select formControlName="priority" name="priority">
+            <mat-option *ngFor="let priority of listOfPriorities" [value]="priority">
+              {{ priority }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="taskForm.get('priority')?.hasError('required') && taskForm.get('priority')?.touched">
+            This field is required!
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Select Employee</mat-label>
+          <mat-select formControlName="employeeId" name="employeeId">
+            <mat-option *ngFor="let employee of listOfEmployees" [value]="employee.id">
+              {{ employee.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="taskForm.get('employeeId')?.hasError('required') && taskForm.get('employeeId')?.touched">
+            This field is required!
+          </mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button class="post-button" type="submit" [disabled]="taskForm.invalid || isLoading">
+          <span *ngIf="!isLoading">Post Task</span>
+          <span *ngIf="isLoading">Posting...</span>
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

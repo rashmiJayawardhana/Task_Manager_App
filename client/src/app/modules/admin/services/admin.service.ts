@@ -1,10 +1,10 @@
-// admin.service.ts
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { StorageService } from '../../../auth/services/storage/storage.service';
 import { Employee } from '../../../shared/models/employee.model';
 import { Task } from '../../../shared/models/task.model';
+import { TaskDto } from '../../../shared/models/task-dto.model';
 
 const BASE_URL = "http://localhost:8080/";
 
@@ -23,8 +23,8 @@ export class AdminService {
     });
   }
 
-  postTask(task: Task): Observable<any> {
-    return this.http.post(BASE_URL + "api/admin/task", task, {
+  postTask(task: Task): Observable<TaskDto> {
+    return this.http.post<TaskDto>(BASE_URL + "api/admin/task", task, {
       headers: this.createAuthorizationHeader(),
     });
   }

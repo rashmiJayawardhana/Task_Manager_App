@@ -12,6 +12,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AdminService } from '../../services/admin.service';
 import { Employee } from '../../../../shared/models/employee.model';
 import { Task } from '../../../../shared/models/task.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-post-task',
@@ -35,11 +36,13 @@ export class PostTaskComponent implements OnInit {
   taskForm!: FormGroup;
   listOfEmployees: Employee[] = [];
   listOfPriorities: string[] = ['LOW', 'MEDIUM', 'HIGH'];
+  isLoading = false;
 
   constructor(
     private adminService: AdminService,
     private fb: FormBuilder,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private router: Router
   ) {
     this.taskForm = this.fb.group({
       employeeId: [null, [Validators.required]],
@@ -72,9 +75,11 @@ export class PostTaskComponent implements OnInit {
 
   postTask() {
     if (this.taskForm.valid) {
+      this.isLoading = true;
       const task: Task = {
         ...this.taskForm.value,
-        dueDate: this.taskForm.value.dueDate.toISOString().split('T')[0], // Format date to YYYY-MM-DD
+        dueDate: this.taskForm.value.dueDate.toISOString().split('T')[0], // Format as YYYY-MM-DD
+        taskStatus: 'INPROGRESS', // Match backend default
       };
       this.adminService.postTask(task).subscribe({
         next: (res) => {
@@ -84,6 +89,7 @@ export class PostTaskComponent implements OnInit {
             panelClass: ['success-snackbar'],
           });
           this.taskForm.reset();
+          this.router.navigateByUrl('/admin/dashboard');
         },
         error: (err) => {
           console.error('Error posting task:', err);
@@ -91,6 +97,9 @@ export class PostTaskComponent implements OnInit {
             duration: 5000,
             panelClass: ['error-snackbar'],
           });
+        },
+        complete: () => {
+          this.isLoading = false;
         },
       });
     }
