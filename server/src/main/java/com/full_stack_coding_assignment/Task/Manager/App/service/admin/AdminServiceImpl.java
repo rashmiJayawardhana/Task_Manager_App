@@ -12,6 +12,7 @@ import com.full_stack_coding_assignment.Task.Manager.App.repository.UserReposito
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -45,5 +46,15 @@ public class AdminServiceImpl implements AdminService {
         task.setUser(optionalUser.get());
         Task savedTask = taskRepository.save(task);
         return taskMapper.toTaskDto(savedTask);
+    }
+
+    @Override
+    public List<TaskDto> getAllTasks() {
+        return taskRepository.findAll()
+                .stream()
+                .filter(task -> task.getUser().getUserRole() == UserRole.EMPLOYEE) // Filter tasks for employees only
+                .sorted(Comparator.comparing(Task::getDueDate, Comparator.nullsLast(Comparator.reverseOrder()))) // Handle null dueDate
+                .map(taskMapper::toTaskDto) // Use TaskMapper
+                .collect(Collectors.toList());
     }
 }
