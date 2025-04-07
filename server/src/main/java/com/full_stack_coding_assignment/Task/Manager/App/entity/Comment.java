@@ -33,13 +33,4 @@ public class Comment {
     @JsonIgnore
     private Task task;
 
-    public CommentDto getCommentDto(){
-        CommentDto commentDto = new CommentDto();
-        commentDto.setId(id);
-        commentDto.setContent(content);
-        commentDto.setCreatedAt(createdAt);
-        commentDto.setTaskId(task.getId());
-        commentDto.setPostedBy(user.getName());
-        return commentDto;
-    }
 }

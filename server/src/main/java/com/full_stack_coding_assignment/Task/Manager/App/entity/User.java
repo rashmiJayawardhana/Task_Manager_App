@@ -1,6 +1,5 @@
 package com.full_stack_coding_assignment.Task.Manager.App.entity;
 
-import com.full_stack_coding_assignment.Task.Manager.App.dto.UserDto;
 import com.full_stack_coding_assignment.Task.Manager.App.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -64,12 +63,4 @@ public class User implements UserDetails {
         return true;
     }
 
-    public UserDto getUserDto(){
-        UserDto userDto = new UserDto();
-        userDto.setId(id);
-        userDto.setName(name);
-        userDto.setEmail(email);
-        userDto.setUserRole(userRole);
-        return userDto;
-    }
 }

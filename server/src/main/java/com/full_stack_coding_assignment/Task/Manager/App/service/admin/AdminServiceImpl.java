@@ -1,20 +1,29 @@
 package com.full_stack_coding_assignment.Task.Manager.App.service.admin;
 
+import com.full_stack_coding_assignment.Task.Manager.App.dto.CommentDto;
 import com.full_stack_coding_assignment.Task.Manager.App.dto.TaskDto;
 import com.full_stack_coding_assignment.Task.Manager.App.dto.UserDto;
+import com.full_stack_coding_assignment.Task.Manager.App.entity.Comment;
 import com.full_stack_coding_assignment.Task.Manager.App.entity.Task;
 import com.full_stack_coding_assignment.Task.Manager.App.entity.User;
 import com.full_stack_coding_assignment.Task.Manager.App.enums.TaskStatus;
 import com.full_stack_coding_assignment.Task.Manager.App.enums.UserRole;
+import com.full_stack_coding_assignment.Task.Manager.App.exception.TaskNotFoundException;
+import com.full_stack_coding_assignment.Task.Manager.App.exception.UserNotFoundException;
+import com.full_stack_coding_assignment.Task.Manager.App.mapper.CommentMapper;
 import com.full_stack_coding_assignment.Task.Manager.App.mapper.TaskMapper;
+import com.full_stack_coding_assignment.Task.Manager.App.mapper.UserMapper;
+import com.full_stack_coding_assignment.Task.Manager.App.repository.CommentRepository;
 import com.full_stack_coding_assignment.Task.Manager.App.repository.TaskRepository;
 import com.full_stack_coding_assignment.Task.Manager.App.repository.UserRepository;
+import com.full_stack_coding_assignment.Task.Manager.App.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,20 +33,13 @@ import java.util.stream.Collectors;
 public class AdminServiceImpl implements AdminService {
 
     private static final Logger logger = LoggerFactory.getLogger(AdminServiceImpl.class);
-
+    private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final TaskRepository taskRepository;
+    private final CommentRepository commentRepository;
     private final TaskMapper taskMapper;
-
-    @Override
-    public List<UserDto> getUsers() {
-        logger.info("Fetching all users with role EMPLOYEE");
-        return userRepository.findAll()
-                .stream()
-                .filter(user -> user.getUserRole() == UserRole.EMPLOYEE)
-                .map(User::getUserDto)
-                .collect(Collectors.toList());
-    }
+    private final UserMapper userMapper;
+    private final CommentMapper commentMapper;
 
     @Override
     public TaskDto createTask(TaskDto taskDto) {
@@ -45,7 +47,7 @@ public class AdminServiceImpl implements AdminService {
         Optional<User> optionalUser = userRepository.findById(taskDto.getEmployeeId());
         if (optionalUser.isEmpty()) {
             logger.error("Employee with ID {} not found while creating task", taskDto.getEmployeeId());
-            throw new IllegalArgumentException("Employee with ID " + taskDto.getEmployeeId() + " not found");
+            throw new UserNotFoundException("Employee with ID " + taskDto.getEmployeeId() + " not found");
         }
 
         Task task = taskMapper.toTask(taskDto);
@@ -54,6 +56,16 @@ public class AdminServiceImpl implements AdminService {
         Task savedTask = taskRepository.save(task);
         logger.info("Task created with ID: {}", savedTask.getId());
         return taskMapper.toTaskDto(savedTask);
+    }
+
+    @Override
+    public List<UserDto> getUsers() {
+        logger.info("Fetching all users with role EMPLOYEE");
+        return userRepository.findAll()
+                .stream()
+                .filter(user -> user.getUserRole() == UserRole.EMPLOYEE)
+                .map(userMapper::toUserDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -72,7 +84,7 @@ public class AdminServiceImpl implements AdminService {
         logger.info("Deleting task with ID: {}", id);
         if (!taskRepository.existsById(id)) {
             logger.error("Task with ID {} not found while deleting", id);
-            throw new IllegalArgumentException("Task with ID " + id + " not found");
+            throw new TaskNotFoundException("Task with ID " + id + " not found");
         }
         taskRepository.deleteById(id);
         logger.info("Task with ID {} deleted successfully", id);
@@ -84,7 +96,7 @@ public class AdminServiceImpl implements AdminService {
         Optional<Task> optionalTask = taskRepository.findById(id);
         if (optionalTask.isEmpty()) {
             logger.error("Task with ID {} not found while fetching", id);
-            throw new IllegalArgumentException("Task with ID " + id + " not found");
+            throw new TaskNotFoundException("Task with ID " + id + " not found");
         }
         return taskMapper.toTaskDto(optionalTask.get());
     }
@@ -95,13 +107,13 @@ public class AdminServiceImpl implements AdminService {
         Optional<Task> optionalTask = taskRepository.findById(id);
         if (optionalTask.isEmpty()) {
             logger.error("Task with ID {} not found while updating", id);
-            throw new IllegalArgumentException("Task with ID " + id + " not found");
+            throw new TaskNotFoundException("Task with ID " + id + " not found");
         }
 
         Optional<User> optionalUser = userRepository.findById(taskDto.getEmployeeId());
         if (optionalUser.isEmpty()) {
             logger.error("Employee with ID {} not found while updating task", taskDto.getEmployeeId());
-            throw new IllegalArgumentException("Employee with ID " + taskDto.getEmployeeId() + " not found");
+            throw new UserNotFoundException("Employee with ID " + taskDto.getEmployeeId() + " not found");
         }
 
         Task existingTask = optionalTask.get();
@@ -130,5 +142,27 @@ public class AdminServiceImpl implements AdminService {
                 .sorted(Comparator.comparing(Task::getDueDate, Comparator.nullsLast(Comparator.reverseOrder())))
                 .map(taskMapper::toTaskDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public CommentDto createComment(Long taskId, String content) {
+        Optional<Task> optionalTask = taskRepository.findById(taskId);
+        User user = jwtUtil.getLoggedInUser();
+        if (optionalTask.isEmpty()) {
+            logger.error("Task with ID {} not found while creating comment", taskId);
+            throw new TaskNotFoundException("Task with ID " + taskId + " not found");
+        }
+        if (user == null) {
+            logger.error("No logged-in user found while creating comment for task ID: {}", taskId);
+            throw new UserNotFoundException("User not found");
+        }
+
+        Comment comment = new Comment();
+        comment.setCreatedAt(new Date());
+        comment.setContent(content);
+        comment.setTask(optionalTask.get());
+        comment.setUser(user);
+        Comment savedComment = commentRepository.save(comment);
+        return commentMapper.toCommentDto(savedComment);
     }
 }

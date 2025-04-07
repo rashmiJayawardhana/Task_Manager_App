@@ -1,5 +1,6 @@
 package com.full_stack_coding_assignment.Task.Manager.App.controller.admin;
 
+import com.full_stack_coding_assignment.Task.Manager.App.dto.CommentDto;
 import com.full_stack_coding_assignment.Task.Manager.App.dto.TaskDto;
 import com.full_stack_coding_assignment.Task.Manager.App.dto.UserDto;
 import com.full_stack_coding_assignment.Task.Manager.App.service.admin.AdminService;
@@ -8,9 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,15 +24,9 @@ public class AdminController {
     }
 
     @PostMapping("/task")
-    public ResponseEntity<?> createTask(@RequestBody TaskDto taskDto) {
-        try {
-            TaskDto createdTaskDto = adminService.createTask(taskDto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdTaskDto);
-        } catch (IllegalArgumentException e) {
-            Map<String, String> error = new HashMap<>();
-            error.put("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-        }
+    public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto taskDto) {
+        TaskDto createdTaskDto = adminService.createTask(taskDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdTaskDto);
     }
 
     @GetMapping("/tasks")
@@ -42,48 +35,31 @@ public class AdminController {
     }
 
     @DeleteMapping("/task/{id}")
-    public ResponseEntity<?> deleteTask(@PathVariable Long id) {
-        try {
-            adminService.deleteTask(id);
-            return ResponseEntity.noContent().build();
-        } catch (IllegalArgumentException e) {
-            Map<String, String> error = new HashMap<>();
-            error.put("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-        }
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+        adminService.deleteTask(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/task/{id}")
-    public ResponseEntity<?> getTaskById(@PathVariable Long id) {
-        try {
-            TaskDto taskDto = adminService.getTaskById(id);
-            return ResponseEntity.ok(taskDto);
-        } catch (IllegalArgumentException e) {
-            Map<String, String> error = new HashMap<>();
-            error.put("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-        }
+    public ResponseEntity<TaskDto> getTaskById(@PathVariable Long id) {
+        TaskDto taskDto = adminService.getTaskById(id);
+        return ResponseEntity.ok(taskDto);
     }
 
     @PutMapping("/task/{id}")
-    public ResponseEntity<?> updateTask(@PathVariable Long id, @RequestBody TaskDto taskDto) {
-        try {
-            TaskDto updatedTaskDto = adminService.updateTask(id, taskDto);
-            return ResponseEntity.ok(updatedTaskDto);
-        } catch (IllegalArgumentException e) {
-            Map<String, String> error = new HashMap<>();
-            error.put("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-        }
+    public ResponseEntity<TaskDto> updateTask(@PathVariable Long id, @RequestBody TaskDto taskDto) {
+        TaskDto updatedTaskDto = adminService.updateTask(id, taskDto);
+        return ResponseEntity.ok(updatedTaskDto);
     }
 
     @GetMapping("/tasks/search/{title}")
-    public ResponseEntity<?> searchTask(@PathVariable String title) {
-        if (title == null || title.trim().isEmpty()) {
-            Map<String, String> error = new HashMap<>();
-            error.put("error", "Search title cannot be empty");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-        }
+    public ResponseEntity<List<TaskDto>> searchTask(@PathVariable String title) {
         return ResponseEntity.ok(adminService.searchTaskByTitle(title));
+    }
+
+    @PostMapping("/task/comment/{taskId}")
+    public ResponseEntity<CommentDto> createComment(@PathVariable Long taskId, @RequestParam String content) {
+        CommentDto createdCommentDto = adminService.createComment(taskId, content);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdCommentDto);
     }
 }

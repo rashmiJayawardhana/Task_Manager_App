@@ -18,6 +18,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -33,34 +35,36 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signupUser(@RequestBody SignupRequest signupRequest){
-        if (authService.hasUserWithEmail(signupRequest.getEmail()))
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("User already exist with this email.");
+    public ResponseEntity<?> signupUser(@RequestBody SignupRequest signupRequest) {
+        if (authService.hasUserWithEmail(signupRequest.getEmail())) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", HttpStatus.CONFLICT.value());
+            errorResponse.put("error", HttpStatus.CONFLICT.getReasonPhrase());
+            errorResponse.put("message", "User already exists with this email");
+            return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+        }
         UserDto createdUserDto = authService.signupUser(signupRequest);
-        if (createdUserDto == null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not created.");
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUserDto);
     }
 
     @PostMapping("/login")
-    public AuthenticationResponse login(@RequestBody AuthenticationRequest authenticationRequest){
-        try{
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest authenticationRequest) {
+        try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     authenticationRequest.getEmail(),
                     authenticationRequest.getPassword()));
         } catch (BadCredentialsException e) {
-            throw new BadCredentialsException("Incorrect username or password!");
+            throw new BadCredentialsException("Incorrect username or password");
         }
         final UserDetails userDetails = userService.userDetailsService().loadUserByUsername(authenticationRequest.getEmail());
         Optional<User> optionalUser = userRepository.findFirstByEmail(authenticationRequest.getEmail());
         final String jwtToken = jwtUtil.generateToken(userDetails);
         AuthenticationResponse authenticationResponse = new AuthenticationResponse();
-        if (optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
             authenticationResponse.setJwt(jwtToken);
             authenticationResponse.setUserId(optionalUser.get().getId());
             authenticationResponse.setUserRole(optionalUser.get().getUserRole());
         }
-        return authenticationResponse;
-
+        return ResponseEntity.ok(authenticationResponse);
     }
 }
