@@ -117,7 +117,7 @@ Task_Manager_App/
 
 ## 🚀 Getting Started
 
-### Option 1: Run with Docker (Recommended)
+### Option 1: Run with Docker Compose (Recommended)
 
 #### 🧬 Prerequisites
 - Docker & Docker Compose
@@ -125,21 +125,19 @@ Task_Manager_App/
 
 #### 🧾 Steps
 
-### Option 1: Run with Docker Compose (Recommended)
-
-#### 1. Clone the Repository
+##### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/your-username/task-manager-app.git
 cd task-manager-app
 ```
 
-### 2. Set Up Environment Variables
+##### 2. Set Up Environment Variables
 ```bash
 cp .env.example .env
 ```
 
-### Example .env
+##### Example .env
 ```env
 # Docker Compose settings
 COMPOSE_BAKE=true
@@ -155,16 +153,16 @@ BACKEND_PORT=8080
 FRONTEND_PORT=80
 ```
 
-### 3. Run the Application
+##### 3. Run the Application
 ```bash
 docker-compose up -d --build
 ```
 
-### 4. Access the Application
+##### 4. Access the Application
 - Frontend: http://localhost
 - Backend API: http://localhost:8080/api
 
-### 5. Stop the Application
+##### 5. Stop the Application
 ```bash
 docker-compose down
 ```
@@ -177,13 +175,13 @@ docker-compose down
 - MySQL Server
 
 #### 🧾 Steps
-### 1.Clone the Repository
+##### 1.Clone the Repository
 ```bash
 git clone https://github.com/your-username/task-manager-app.git
 cd task-manager-app
 ```
 
-### 2. Set Up the MySQL Database
+##### 2. Set Up the MySQL Database
 Create a database named task_manager_db. Then update the following properties in server/src/main/resources/application.properties:
 ```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/task_manager_db
@@ -192,21 +190,21 @@ spring.datasource.password=your password
 spring.jpa.hibernate.ddl-auto=update
 ```
 
-### 3. Run the Backend
+##### 3. Run the Backend
 ```bash
 cd server
 mvn clean install
 mvn spring-boot:run
 ```
 
-### 4. Run the Frontend
+##### 4. Run the Frontend
 ```bash
 cd client
 npm install
 ng serve
 ```
 
-### 5. Access the Application
+##### 5. Access the Application
 - Frontend: http://localhost:4200
 - Backend: http://localhost:8080/api
 
@@ -218,17 +216,6 @@ Username : admin
 Password: admin
 ```
 Once logged in, a JWT token will be stored in the browser and attached to all protected API requests.
-
-## 📚 Resources
-- Angular Docs
-
-- Spring Boot Docs
-
-- JWT.io
-
-- Docker Docs
-
-- MySQL Docs
 
 
 
