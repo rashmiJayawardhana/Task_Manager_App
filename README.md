@@ -93,7 +93,7 @@ Task_Manager_App/
 ├── client/                    # Angular frontend
 │   ├── src/                   # Source code
 │   │   ├── app/              # Angular components, services, and modules
-│   │    
+│   │   | 
 │   │   └── styles.scss       # Global styles
 │   ├── Dockerfile            # Frontend Dockerfile
 │   ├── nginx.conf            # Nginx config
@@ -214,7 +214,7 @@ ng serve
 Use the following test credentials to log in (or register a new user):
 ```txt
 Admin User:
-username : admin
+Username : admin
 Password: admin
 ```
 Once logged in, a JWT token will be stored in the browser and attached to all protected API requests.
