@@ -1,86 +1,94 @@
-# Task Manager Web Application
+# ✅ Task Manager Web Application
 
-Welcome to the **Task Manager Web Application**! This is a full-stack application built with **Angular** for the frontend, **Spring Boot** for the backend, and **MySQL** as the database. The app allows users to manage tasks (create, view, edit, and delete) and includes advanced features like JWT-based authentication and Docker deployment.
+Welcome to the **Task Manager Web Application** — a full-stack project designed for efficient task tracking within organizations. Built with **Angular** (frontend), **Spring Boot** (backend), and **MySQL**, this app supports task management, commenting, role-based access, JWT authentication, and Dockerized deployment.
+
+---
+
+## 📌 Table of Contents
+
+- [📋 Project Overview](#-project-overview)
+- [🛠️ Tech Stack](#-tech-stack)
+- [✨ Features](#-features)
+- [📸 Screenshots](#-screenshots)
+- [🗂️ Project Structure](#-project-structure)
+- [🚀 Getting Started](#-getting-started)
+  - [Option 1: Run with Docker (Recommended)](#option-1-run-with-docker-recommended)
+  - [Option 2: Run Locally (Without Docker)](#option-2-run-locally-without-docker)
+- [🔐 Credentials (JWT Auth)](#-credentials-jwt-auth)
+- [📚 Resources](#-resources)
+
+---
 
 ## 📋 Project Overview
 
-The Task Manager app provides a user-friendly interface for employees to manage tasks within an organization. It includes an Employee module with a detailed Task Details page where employees can:
+The app provides a user-friendly interface for employees and admins to manage tasks effectively.
 
-- View task details by task ID.
-- See comments posted on a task by task ID.
-- Post new comments on tasks.
+**Core Functionalities:**
 
-The application is built with a modern tech stack and follows best practices for modularity, scalability, and security.
+- View, create, edit, and delete tasks.
+- Filter tasks based on status.
+- View and post comments on specific tasks.
+- Authentication and role-based authorization.
+
+---
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: Angular 17, Angular Material, TypeScript, SCSS
-- **Backend**: Spring Boot 3, Spring Security, Spring Data JPA, Java 17
-- **Database**: MySQL 8
-- **Authentication**: JSON Web Tokens (JWT)
-- **Containerization**: Docker, Docker Compose
-- **Version Control**: Git, GitHub
+| Layer       | Technologies |
+|-------------|--------------|
+| Frontend    | Angular 17, Angular Material, TypeScript, SCSS |
+| Backend     | Spring Boot 3, Spring Security, Java 17, Spring Data JPA |
+| Database    | MySQL 8 |
+| Auth        | JWT (JSON Web Token) |
+| Deployment  | Docker, Docker Compose |
+| Versioning  | Git, GitHub |
+
+---
 
 ## ✨ Features
 
-### General Features
-- **Task Management**:
-  - Create, read, update, and delete (CRUD) tasks.
-  - Filter tasks by status (e.g., TO_DO, IN_PROGRESS, DONE).
-  - View detailed task information on a Task Details page.
-- **Comment System**:
-  - Employees can view comments associated with a specific task.
-  - Employees can post new comments on tasks.
-- **Responsive UI**:
-  - Built with Angular Material for a clean and modern user interface.
-  - Supports navigation between Task List, Task Form, and Task Details pages.
+### 🧾 General
+- Task CRUD operations with status filters.
+- Responsive UI with Angular Material.
+- Comment system under each task.
 
-### Backend (Spring Boot)
-- RESTful API for task management.
-- JWT-based authentication for secure access to endpoints.
-- Integration with MySQL database using Spring Data JPA.
-- Role-based authorization (e.g., Employee, Admin).
+### 🔐 Backend
+- Secure REST APIs with JWT.
+- Role-based access (Employee, Admin).
+- MySQL with Spring Data JPA integration.
 
-### Frontend (Angular)
-- Single Page Application (SPA) built with Angular.
-- Angular Material components for UI consistency.
-- Client-side routing with Angular Router.
-- HTTP client for interacting with the Spring Boot REST API.
-- Displays error messages for API failures.
-- Task List Page: Displays tasks in a table with status filtering.
-- Task Form Page: Add/edit tasks using Reactive Forms with validation.
-- Task Details Page: Shows task info, comments, and a form to post comments.
+### 💻 Frontend
+- Angular SPA with routing & validation.
+- Task List, Task Form, and Task Detail pages.
+- Error handling for API calls.
 
-### Security
-- **JWT Authentication**: Secure login and token-based access to protected resources.
-- Role-based access control (RBAC) implemented in the backend.
+### 🛡️ Security
+- JWT-based Authentication & Authorization.
+- Role-based access for secure data handling.
 
-### Deployment
-- Dockerized application for easy setup and deployment.
-- Docker Compose support for running Angular frontend (served via Nginx), Spring Boot backend, and MySQL database together.
+### 📦 Deployment
+- Dockerized backend, frontend, and MySQL.
+- Docker Compose for single-command deployment.
 
-## Admin Dashboard
-![Screenshot (190)](https://github.com/user-attachments/assets/24bbb6ec-16b3-4fcd-9f8c-664607353bb4)
+---
 
-## Sign Up
-![Screenshot (194)](https://github.com/user-attachments/assets/2c3df6a5-3607-429a-a2a3-0aeac27a7fff)
+## 📸 Screenshots
 
-## Login
-![Screenshot (193)](https://github.com/user-attachments/assets/b81c05de-71c8-4e32-b776-aced82c84311)
+| View | Image |
+|------|-------|
+| Admin Dashboard | ![Admin Dashboard](https://github.com/user-attachments/assets/24bbb6ec-16b3-4fcd-9f8c-664607353bb4) |
+| Sign Up | ![Sign Up](https://github.com/user-attachments/assets/2c3df6a5-3607-429a-a2a3-0aeac27a7fff) |
+| Login | ![Login](https://github.com/user-attachments/assets/b81c05de-71c8-4e32-b776-aced82c84311) |
+| Add Task | ![Add Task](https://github.com/user-attachments/assets/9cf74677-b1dd-4677-b9ec-f5277342ae9d) |
+| View Task + Comments | ![View Task](https://github.com/user-attachments/assets/ebbe5f87-bcb0-4e35-9398-cf3437b1e3bf) |
+| Edit Task | ![Edit Task](https://github.com/user-attachments/assets/1d7b7828-91c9-4297-a0ba-af0053a045f6) |
+| Employee Dashboard | ![Employee Dashboard](https://github.com/user-attachments/assets/8db091d3-3db2-4556-af03-d800c3a4e0b6) |
 
-## Add new task
-![Screenshot (191)](https://github.com/user-attachments/assets/9cf74677-b1dd-4677-b9ec-f5277342ae9d)
+---
 
-## View task details, post comments, view comments
-![Screenshot (192)](https://github.com/user-attachments/assets/ebbe5f87-bcb0-4e35-9398-cf3437b1e3bf)
+## 🗂️ Project Structure
 
-## Edit task
-![Screenshot (196)](https://github.com/user-attachments/assets/1d7b7828-91c9-4297-a0ba-af0053a045f6)
-
-## Employee Dashboard
-![Screenshot (195)](https://github.com/user-attachments/assets/8db091d3-3db2-4556-af03-d800c3a4e0b6)
-
-## Project Structure
+```
 Task_Manager_App/
 ├── client/                    # Angular frontend
 │   ├── src/                   # Source code
@@ -102,35 +110,41 @@ Task_Manager_App/
 ├── docker-compose.yml
 ├── .env
 └── README.md
+```
 
 
 
 
+## 🚀 Getting Started
 
-## Getting Started
+### ✅ Prerequisites
 
-### Prerequisites
+Ensure you have the following installed:
+- [Node.js (v16+)](https://nodejs.org/)
+- [Angular CLI](https://angular.io/cli): `npm install -g @angular/cli`
+- [Java JDK 17+](https://www.oracle.com/java/)
+- [Maven](https://maven.apache.org/)
+- [MySQL](https://dev.mysql.com/downloads/)
+- [Docker](https://www.docker.com/get-started)
+- [Git](https://git-scm.com/)
 
-Before you begin, ensure you have the following installed:
-- **Node.js** (v16 or later) and **npm** (v8 or later): [Download](https://nodejs.org/)
-- **Angular CLI**: `npm install -g @angular/cli`
-- **Java JDK** (17 or later): [Download](https://www.oracle.com/java/)
-- **Maven**: [Download](https://maven.apache.org/)
-- **MySQL**: [Download](https://dev.mysql.com/downloads/)
-- **Docker**: [Download](https://www.docker.com/get-started)
-- **Git**: [Download](https://git-scm.com/)
+---
 
-## Setup Instructions
+## ⚙️ Setup Instructions
 
 ### Option 1: Run with Docker Compose (Recommended)
-### 1.Clone the Repository
+
+#### 1. Clone the Repository
+
 ```bash
-git clone https://github.com/your-username/task-manager-web-app.git
+git clone https://github.com/your-username/task-manager-app.git
 cd task-manager-app
+```
 
 ### 2. Set Up Environment Variables
 ```bash
 cp .env.example .env
+```
 
 ### Example .env
 ##### Docker Compose settings
@@ -150,6 +164,7 @@ cp .env.example .env
 ### 3. Run the Application
 ```bash
 docker-compose up -d --build
+```
 
 ### 4. Access the Application
 - Frontend: http://localhost
@@ -158,39 +173,42 @@ docker-compose up -d --build
 ### 5. Stop the Application
 ```bash
 docker-compose down
+```
 
 ### Option 2: Run Locally (Without Docker)
 ### 1.Clone the Repository
 ```bash
 git clone https://github.com/your-username/task-manager-app.git
 cd task-manager-app
+```
 
-### 2. Set Up the Database
-Create a database named task_manager_db and update:
+### 2. Set Up the MySQL Database
+Create a database named task_manager_db. Then update the following properties in server/src/main/resources/application.properties:
+```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/task_manager_db
 spring.datasource.username=youre username
 spring.datasource.password=your password
 spring.jpa.hibernate.ddl-auto=update
+```
 
 ### 3. Run the Backend
 ```bash
 cd server
 mvn clean install
 mvn spring-boot:run
+```
 
 ### 4. Run the Frontend
 ```bash
 cd client
 npm install
 ng serve
+```
 
 ### 5. Access the Application
 - Frontend: http://localhost:4200
 - Backend: http://localhost:8080/api
 
-### 5. Stop the Application
-```bash
-docker-compose down
 
 ## Resources
 - Angular Docs
