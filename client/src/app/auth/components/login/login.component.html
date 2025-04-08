@@ -1,36 +1,36 @@
 <div class="container">
-    <mat-card>
-      <mat-card-title>Login</mat-card-title>
-  
-      <mat-card-content>
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-          <mat-form-field appearance="outline">
-            <mat-label>Email</mat-label>
-            <input matInput formControlName="email" placeholder="Email" required>
-            <mat-error *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
-              {{ loginForm.get('email')?.errors?.['required'] ? 'Email is required.' : 'Please enter a valid email address.' }}
-            </mat-error>
-          </mat-form-field>
-  
-          <mat-form-field appearance="outline">
-            <mat-label>Password</mat-label>
-            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" placeholder="Password" required>
-            <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button">
-              <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-            </button>
-            <mat-error *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-              {{ loginForm.get('password')?.errors?.['required'] ? 'Password is required.' : 'Password must be at least 6 characters.' }}
-            </mat-error>
-          </mat-form-field>
-  
-          <button mat-raised-button class="login-button" type="submit" [disabled]="loginForm.invalid">
-            Login
+  <mat-card>
+    <mat-card-title>Login</mat-card-title>
+
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline">
+          <mat-label>Username</mat-label>
+          <input matInput formControlName="username" placeholder="Username" required>
+          <mat-error *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+            {{ loginForm.get('username')?.errors?.['required'] ? 'Username is required.' : 'Username must be alphanumeric.' }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" placeholder="Password" required>
+          <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
-        </form>
-      </mat-card-content>
-  
-      <mat-card-actions>
-        <button mat-button routerLink="/signup">Don't have an account? Sign Up</button>
-      </mat-card-actions>
-    </mat-card>
-  </div>
+          <mat-error *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+            {{ loginForm.get('password')?.errors?.['required'] ? 'Password is required.' : 'Password must be at least 5 characters.' }}
+          </mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button class="login-button" type="submit" [disabled]="loginForm.invalid">
+          Login
+        </button>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-button routerLink="/signup">Don't have an account? Sign Up</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

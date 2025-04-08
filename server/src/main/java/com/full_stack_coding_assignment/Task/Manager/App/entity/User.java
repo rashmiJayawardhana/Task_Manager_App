@@ -1,6 +1,7 @@
 package com.full_stack_coding_assignment.Task.Manager.App.entity;
 
 import com.full_stack_coding_assignment.Task.Manager.App.enums.UserRole;
+import com.fasterxml.jackson.annotation.JsonProperty; // Import Jackson annotation
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,12 +18,13 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String name;
 
-    @Column(nullable=false, unique = true)
-    private String email;
+    @Column(nullable = false, unique = true)
+    private String username;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // Only allow deserialization, not serialization
     private String password;
 
     private UserRole userRole;
@@ -34,35 +36,38 @@ public class User implements UserDetails {
         return List.of(new SimpleGrantedAuthority(userRole.name()));
     }
 
-
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public String getPassword() {
         return password;
     }
 
     @Override
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public boolean isEnabled() {
         return true;
     }
-
 }

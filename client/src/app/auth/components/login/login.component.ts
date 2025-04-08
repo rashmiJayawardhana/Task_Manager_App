@@ -1,5 +1,4 @@
-// login.component.ts
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -46,10 +45,10 @@ export class LoginComponent {
     private authService: AuthService,
     private snackbar: MatSnackBar,
     private router: Router,
-    private storageService: StorageService 
+    private storageService: StorageService
   ) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      username: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9]+$/)]], // Changed from email
       password: ['', [Validators.required, Validators.minLength(5)]],
     });
   }
@@ -68,8 +67,8 @@ export class LoginComponent {
             id: res.userId,
             role: res.userRole,
           };
-          this.storageService.saveUser(user); 
-          this.storageService.saveToken(res.jwt); 
+          this.storageService.saveUser(user);
+          this.storageService.saveToken(res.jwt);
 
           console.log('Login Input Data:', this.loginForm.value);
           console.log('Login Successful! User ID:', res.userId, 'Role:', res.userRole);
@@ -108,7 +107,7 @@ export class LoginComponent {
         console.error('Login error:', err);
         const errorMessage =
           (err as any).status === 401
-            ? 'Invalid email or password. Please try again.'
+            ? 'Invalid username or password. Please try again.'
             : (err as any).error?.message || 'Login failed. Please try again.';
         this.snackbar.open(errorMessage, 'Close', {
           duration: 5000,

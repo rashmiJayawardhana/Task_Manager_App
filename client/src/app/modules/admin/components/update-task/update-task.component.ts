@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -11,10 +11,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AdminService } from '../../services/admin.service';
 import { Employee } from '../../../../shared/models/employee.model';
-import { TaskDto, CreateTaskDto } from '../../../../shared/models/task-dto.model';
+import { CreateTaskDto } from '../../../../shared/models/task-dto.model';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { format } from 'date-fns';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-update-task',
@@ -30,18 +33,21 @@ import { format } from 'date-fns';
     MatButtonModule,
     MatCardModule,
     MatSnackBarModule,
+    MatProgressSpinnerModule,
     RouterLink,
   ],
   templateUrl: './update-task.component.html',
   styleUrls: ['./update-task.component.scss'],
 })
-export class UpdateTaskComponent implements OnInit {
+export class UpdateTaskComponent implements OnInit, OnDestroy {
   updateTaskForm: FormGroup;
   listOfEmployees: Employee[] = [];
   listOfPriorities: string[] = ['LOW', 'MEDIUM', 'HIGH'];
   listOfTaskStatuses: string[] = ['PENDING', 'INPROGRESS', 'COMPLETED', 'DEFERRED', 'CANCELLED'];
   taskId: number;
   isUpdating = false;
+  private titleSubscription!: Subscription;
+  private descriptionSubscription!: Subscription;
 
   constructor(
     private fb: FormBuilder,
@@ -52,8 +58,8 @@ export class UpdateTaskComponent implements OnInit {
   ) {
     this.taskId = Number(this.route.snapshot.paramMap.get('id'));
     this.updateTaskForm = this.fb.group({
-      title: ['', Validators.required],
-      description: ['', Validators.required],
+      title: ['', [Validators.required, Validators.maxLength(50)]],
+      description: ['', [Validators.required, Validators.maxLength(200)]],
       dueDate: ['', Validators.required],
       priority: ['', Validators.required],
       employeeId: ['', Validators.required],
@@ -64,6 +70,16 @@ export class UpdateTaskComponent implements OnInit {
   ngOnInit() {
     this.loadEmployees();
     this.loadTask();
+    this.setupValidationAlerts();
+  }
+
+  ngOnDestroy() {
+    if (this.titleSubscription) {
+      this.titleSubscription.unsubscribe();
+    }
+    if (this.descriptionSubscription) {
+      this.descriptionSubscription.unsubscribe();
+    }
   }
 
   loadEmployees() {
@@ -103,6 +119,40 @@ export class UpdateTaskComponent implements OnInit {
     });
   }
 
+  setupValidationAlerts() {
+    this.titleSubscription = this.updateTaskForm.get('title')!.valueChanges.pipe(
+      debounceTime(300)
+    ).subscribe(value => {
+      const titleControl = this.updateTaskForm.get('title');
+      if (titleControl?.hasError('maxlength') && titleControl.touched) {
+        this.snackbar.open(
+          `Title exceeds maximum length of 50 characters (current: ${value?.length || 0})`,
+          'Close',
+          {
+            duration: 5000,
+            panelClass: ['error-snackbar'],
+          }
+        );
+      }
+    });
+
+    this.descriptionSubscription = this.updateTaskForm.get('description')!.valueChanges.pipe(
+      debounceTime(300)
+    ).subscribe(value => {
+      const descriptionControl = this.updateTaskForm.get('description');
+      if (descriptionControl?.hasError('maxlength') && descriptionControl.touched) {
+        this.snackbar.open(
+          `Description exceeds maximum length of 500 characters (current: ${value?.length || 0})`,
+          'Close',
+          {
+            duration: 5000,
+            panelClass: ['error-snackbar'],
+          }
+        );
+      }
+    });
+  }
+
   updateTask() {
     if (this.updateTaskForm.valid) {
       this.isUpdating = true;
@@ -134,6 +184,11 @@ export class UpdateTaskComponent implements OnInit {
           });
           this.isUpdating = false;
         },
+      });
+    } else {
+      this.snackbar.open('Please correct the errors in the form before submitting.', 'Close', {
+        duration: 5000,
+        panelClass: ['error-snackbar'],
       });
     }
   }

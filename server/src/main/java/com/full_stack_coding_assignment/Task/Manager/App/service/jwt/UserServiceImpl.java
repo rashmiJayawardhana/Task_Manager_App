@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
@@ -18,8 +18,8 @@ public class UserServiceImpl implements UserService{
         return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                return userRepository.findFirstByEmail(username)
-                        .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
+                return userRepository.findFirstByUsername(username) // Changed from findFirstByEmail
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
             }
         };
     }

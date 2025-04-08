@@ -1,77 +1,96 @@
 <div class="container">
     <h2>Update Task</h2>
     <mat-card>
-        <form [formGroup]="updateTaskForm">
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-label>Title</mat-label>
-                <input matInput formControlName="title" required />
-                <mat-error *ngIf="updateTaskForm.get('title')?.hasError('required')">
-                    Title is required
-                </mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-label>Description</mat-label>
-                <textarea matInput formControlName="description" required></textarea>
-                <mat-error *ngIf="updateTaskForm.get('description')?.hasError('required')">
-                    Description is required
-                </mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-label>Due Date</mat-label>
-                <input matInput [matDatepicker]="picker" formControlName="dueDate" required />
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-                <mat-error *ngIf="updateTaskForm.get('dueDate')?.hasError('required')">
-                    Due date is required
-                </mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-label>Priority</mat-label>
-                <mat-select formControlName="priority" required>
-                    <mat-option *ngFor="let priority of listOfPriorities" [value]="priority">
-                        {{ priority }}
-                    </mat-option>
-                </mat-select>
-                <mat-error *ngIf="updateTaskForm.get('priority')?.hasError('required')">
-                    Priority is required
-                </mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-label>Status</mat-label>
-                <mat-select formControlName="taskStatus" required>
-                    <mat-option *ngFor="let status of listOfTaskStatuses" [value]="status">
-                        {{ status }}
-                    </mat-option>
-                </mat-select>
-                <mat-error *ngIf="updateTaskForm.get('taskStatus')?.hasError('required')">
-                    Status is required
-                </mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-label>Employee</mat-label>
-                <mat-select formControlName="employeeId" required>
-                    <mat-option *ngFor="let employee of listOfEmployees" [value]="employee.id">
-                        {{ employee.name }}
-                    </mat-option>
-                </mat-select>
-                <mat-error *ngIf="updateTaskForm.get('employeeId')?.hasError('required')">
-                    Employee is required
-                </mat-error>
-            </mat-form-field>
-
-            <div class="form-actions">
-                <button mat-raised-button color="primary" class="post-button action-button" type="button" (click)="updateTask()" [disabled]="updateTaskForm.invalid || isUpdating">
-                    {{ isUpdating ? 'Updating...' : 'Update Task' }}
-                </button>
-                <button mat-raised-button color="warn" class="action-button" type="button" [routerLink]="['/admin/dashboard']" [disabled]="isUpdating">
-                    Cancel
-                </button>
-            </div>
+      <mat-card-content>
+        <form [formGroup]="updateTaskForm" (ngSubmit)="updateTask()">
+          <!-- Title -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Title</mat-label>
+            <input matInput type="text" formControlName="title" placeholder="Title" maxlength="50" />
+            <mat-hint [align]="'end'">{{ updateTaskForm.get('title')?.value?.length || 0 }}/30</mat-hint>
+            <mat-error *ngIf="updateTaskForm.get('title')?.hasError('required') && updateTaskForm.get('title')?.touched">
+              This field is required!
+            </mat-error>
+            <mat-error *ngIf="updateTaskForm.get('title')?.hasError('maxlength') && updateTaskForm.get('title')?.touched">
+              Title cannot exceed 50 characters (current: {{ updateTaskForm.get('title')?.value?.length || 0 }})
+            </mat-error>
+          </mat-form-field>
+  
+          <!-- Description -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description" placeholder="Description" maxlength="500"></textarea>
+            <mat-hint [align]="'end'">{{ updateTaskForm.get('description')?.value?.length || 0 }}/200</mat-hint>
+            <mat-error *ngIf="updateTaskForm.get('description')?.hasError('required') && updateTaskForm.get('description')?.touched">
+              This field is required!
+            </mat-error>
+            <mat-error *ngIf="updateTaskForm.get('description')?.hasError('maxlength') && updateTaskForm.get('description')?.touched">
+              Description cannot exceed 500 characters (current: {{ updateTaskForm.get('description')?.value?.length || 0 }})
+            </mat-error>
+          </mat-form-field>
+  
+          <!-- Due Date -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Due Date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="dueDate" placeholder="Choose a due date" />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="updateTaskForm.get('dueDate')?.hasError('required') && updateTaskForm.get('dueDate')?.touched">
+              This field is required!
+            </mat-error>
+          </mat-form-field>
+  
+          <!-- Priority -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Select Priority</mat-label>
+            <mat-select formControlName="priority">
+              <mat-option *ngFor="let priority of listOfPriorities" [value]="priority">
+                {{ priority }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="updateTaskForm.get('priority')?.hasError('required') && updateTaskForm.get('priority')?.touched">
+              This field is required!
+            </mat-error>
+          </mat-form-field>
+  
+          <!-- Status -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Select Status</mat-label>
+            <mat-select formControlName="taskStatus">
+              <mat-option *ngFor="let status of listOfTaskStatuses" [value]="status">
+                {{ status }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="updateTaskForm.get('taskStatus')?.hasError('required') && updateTaskForm.get('taskStatus')?.touched">
+              This field is required!
+            </mat-error>
+          </mat-form-field>
+  
+          <!-- Employee -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Select Employee</mat-label>
+            <mat-select formControlName="employeeId">
+              <mat-option *ngFor="let employee of listOfEmployees" [value]="employee.id">
+                {{ employee.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="updateTaskForm.get('employeeId')?.hasError('required') && updateTaskForm.get('employeeId')?.touched">
+              This field is required!
+            </mat-error>
+          </mat-form-field>
+  
+          <!-- Form Actions -->
+          <div class="form-actions">
+            <button mat-raised-button class="post-button action-button" type="submit" [disabled]="updateTaskForm.invalid || isUpdating">
+              <mat-spinner diameter="20" *ngIf="isUpdating"></mat-spinner>
+              <span *ngIf="!isUpdating">Update Task</span>
+              <span *ngIf="isUpdating">Updating...</span>
+            </button>
+            <button mat-raised-button color="warn" class="action-button" type="button" [routerLink]="['/admin/dashboard']" [disabled]="isUpdating">
+              Cancel
+            </button>
+          </div>
         </form>
+      </mat-card-content>
     </mat-card>
-</div>
+  </div>

@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator'; // Added for pagination
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { AdminService } from '../../services/admin.service';
 import { TaskDto } from '../../../../shared/models/task-dto.model';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -30,7 +30,7 @@ import { RouterLink } from '@angular/router';
     MatProgressSpinnerModule,
     MatButtonModule,
     MatTooltipModule,
-    MatPaginatorModule, // Added
+    MatPaginatorModule,
     ReactiveFormsModule,
     RouterLink,
   ],
@@ -39,7 +39,7 @@ import { RouterLink } from '@angular/router';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   listOfTasks: TaskDto[] | undefined;
-  paginatedTasks: TaskDto[] = []; // Tasks to display on the current page
+  paginatedTasks: TaskDto[] = [];
   taskCounts: { [key: string]: number } = {
     PENDING: 0,
     INPROGRESS: 0,
@@ -51,8 +51,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   isLoading = false;
   isDeleting: { [key: number]: boolean } = {};
   private destroy$ = new Subject<void>();
-  pageSize = 9; // Number of tasks per page
-  currentPage = 0; // Current page index
+  pageSize = 9;
+  currentPage = 0;
+  showFullTitle: { [key: number]: boolean } = {}; // Track whether to show full title for each task
 
   constructor(
     private service: AdminService,
@@ -183,7 +184,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }));
         this.listOfTasks = this.sortTasks(this.listOfTasks);
         this.updateTaskCounts();
-        this.currentPage = 0; // Reset to first page on search
+        this.currentPage = 0;
         this.updatePaginatedTasks();
         this.isLoading = false;
       },
@@ -232,7 +233,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             duration: 5000,
             panelClass: ['success-snackbar'],
           });
-          this.getTasks(); // Refresh the task list
+          this.getTasks();
           this.isDeleting[id] = false;
         },
         error: (err) => {
@@ -255,7 +256,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return `status-${(status ?? 'unknown').toLowerCase()}`;
   }
 
-  // Pagination logic
   private updatePaginatedTasks() {
     if (!this.listOfTasks) {
       this.paginatedTasks = [];
@@ -264,11 +264,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const startIndex = this.currentPage * this.pageSize;
     const endIndex = startIndex + this.pageSize;
     this.paginatedTasks = this.listOfTasks.slice(startIndex, endIndex);
+    // Reset showFullTitle for new paginated tasks
+    this.paginatedTasks.forEach(task => {
+      if (!this.showFullTitle.hasOwnProperty(task.id)) {
+        this.showFullTitle[task.id] = false;
+      }
+    });
   }
 
   onPageChange(event: PageEvent) {
     this.currentPage = event.pageIndex;
     this.pageSize = event.pageSize;
     this.updatePaginatedTasks();
+  }
+
+  toggleShowMore(taskId: number) {
+    this.showFullTitle[taskId] = !this.showFullTitle[taskId];
+  }
+
+  getTruncatedTitle(title: string, taskId: number): string {
+    if (this.showFullTitle[taskId] || title.length <= 25) {
+      return title;
+    }
+    return title.substring(0, 25) + '...';
   }
 }

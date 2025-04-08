@@ -16,7 +16,14 @@
       <mat-card class="task-card">
         <div class="task-details">
           <h2 class="task-name">{{ taskData.title }}</h2>
-          <p class="task-description">{{ taskData.description || 'No description provided' }}</p>
+          <div class="task-description-wrapper">
+            <p class="task-description" [ngClass]="{'truncated': !showFullDescription}">
+              {{ taskData.description || 'No description provided' }}
+            </p>
+            <button *ngIf="isDescriptionLong" mat-button class="show-more-btn" (click)="toggleShowDescription()">
+              {{ showFullDescription ? 'Show Less' : 'Show More' }}
+            </button>
+          </div>
   
           <mat-divider></mat-divider>
           <div class="task-info">

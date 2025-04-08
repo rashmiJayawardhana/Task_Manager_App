@@ -14,9 +14,10 @@ public class UserMapper {
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
         userDto.setName(user.getName());
-        userDto.setEmail(user.getEmail());
+        userDto.setUsername(user.getUsername());
         userDto.setUserRole(user.getUserRole());
         userDto.setProfileImage(user.getProfileImage() != null ? user.getProfileImage() : "default-profile.png");
+        // Do not map password
         return userDto;
     }
 
@@ -27,9 +28,10 @@ public class UserMapper {
         User user = new User();
         user.setId(userDto.getId());
         user.setName(userDto.getName());
-        user.setEmail(userDto.getEmail());
+        user.setUsername(userDto.getUsername());
         user.setUserRole(userDto.getUserRole());
         user.setProfileImage(userDto.getProfileImage());
+        // Do not map password (it should be set separately, e.g., during signup)
         return user;
     }
 }

@@ -45,13 +45,40 @@
           font-weight: 600;
           color: #333;
           margin-bottom: 10px;
+          word-break: break-word; // Ensure long words wrap
         }
   
-        .task-description {
-          font-size: 16px;
-          color: #666;
+        .task-description-wrapper {
           margin-bottom: 15px;
-          line-height: 1.6;
+  
+          .task-description {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+            margin: 0;
+  
+            &.truncated {
+              max-height: 100px; // Limit height to ~3 lines
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-line-clamp: 3; // Limit to 3 lines
+              -webkit-box-orient: vertical;
+            }
+          }
+  
+          .show-more-btn {
+            font-size: 14px;
+            color: #0288d1;
+            padding: 0;
+            min-width: unset;
+            line-height: normal;
+  
+            &:hover {
+              color: #01579b;
+              text-decoration: underline;
+            }
+          }
         }
   
         .task-info {

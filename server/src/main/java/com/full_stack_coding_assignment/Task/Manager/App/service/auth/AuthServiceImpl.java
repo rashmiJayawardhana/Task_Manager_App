@@ -25,7 +25,7 @@ public class AuthServiceImpl implements AuthService {
         Optional<User> optionalUser = userRepository.findByUserRole(UserRole.ADMIN);
         if (optionalUser.isEmpty()) {
             User user = new User();
-            user.setEmail("admin@test.com");
+            user.setUsername("admin"); // Changed from email to username
             user.setName("Admin");
             user.setPassword(new BCryptPasswordEncoder().encode("admin"));
             user.setUserRole(UserRole.ADMIN);
@@ -39,7 +39,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public UserDto signupUser(SignupRequest signupRequest) {
         User user = new User();
-        user.setEmail(signupRequest.getEmail());
+        user.setUsername(signupRequest.getUsername()); // Changed from email to username
         user.setName(signupRequest.getName());
         user.setPassword(new BCryptPasswordEncoder().encode(signupRequest.getPassword()));
         user.setUserRole(UserRole.EMPLOYEE);
@@ -48,7 +48,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean hasUserWithEmail(String email) {
-        return userRepository.findFirstByEmail(email).isPresent();
+    public boolean hasUserWithUsername(String username) {
+        return userRepository.findFirstByUsername(username).isPresent(); // Changed to username
     }
 }

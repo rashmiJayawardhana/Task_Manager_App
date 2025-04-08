@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,12 +10,13 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 
-// Define the expected response type from the API
 interface SignupResponse {
-  id: number | string; // Match the backend's UserDto 'id' property
+  id: number | string;
   name: string;
-  email: string;
-  message?: string; // For error messages
+  username: string;
+  userRole: string;
+  profileImage: string;
+  message?: string;
 }
 
 @Component({
@@ -48,12 +49,21 @@ export class SignupComponent {
     this.signupForm = this.fb.group(
       {
         name: ['', Validators.required],
-        email: ['', [Validators.required, Validators.email]],
+        username: ['', [Validators.required, Validators.pattern(/^[a-z0-9]+$/), this.lowercaseValidator]],
         password: ['', [Validators.required, Validators.minLength(5)]],
         confirmPassword: ['', Validators.required],
       },
       { validators: this.passwordMatchValidator }
     );
+  }
+
+  // Custom validator to ensure the username is lowercase
+  lowercaseValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    const value = control.value;
+    if (value && value !== value.toLowerCase()) {
+      return { notLowercase: true };
+    }
+    return null;
   }
 
   passwordMatchValidator(form: FormGroup) {
@@ -68,11 +78,13 @@ export class SignupComponent {
 
   onSubmit() {
     if (this.signupForm.valid) {
-      this.authService.signup(this.signupForm.value).subscribe({
+      const { name, username, password } = this.signupForm.value;
+      const signupRequest = { name, username, password };
+      this.authService.signup(signupRequest).subscribe({
         next: (res: SignupResponse) => {
           if (res.id != null) {
-            console.log('Signup Input Data:', this.signupForm.value); 
-            console.log('Signup Successful! User ID:', res.id); 
+            console.log('Signup Input Data:', signupRequest);
+            console.log('Signup Successful! User ID:', res.id);
             this.snackbar.open('Signup successful', 'Close', {
               duration: 5000,
               panelClass: ['success-snackbar'],

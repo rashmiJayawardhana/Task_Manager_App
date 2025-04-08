@@ -36,11 +36,11 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> signupUser(@RequestBody SignupRequest signupRequest) {
-        if (authService.hasUserWithEmail(signupRequest.getEmail())) {
+        if (authService.hasUserWithUsername(signupRequest.getUsername())) { // Changed to username
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("status", HttpStatus.CONFLICT.value());
             errorResponse.put("error", HttpStatus.CONFLICT.getReasonPhrase());
-            errorResponse.put("message", "User already exists with this email");
+            errorResponse.put("message", "User already exists with this username");
             return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
         }
         UserDto createdUserDto = authService.signupUser(signupRequest);
@@ -51,13 +51,13 @@ public class AuthController {
     public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest authenticationRequest) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    authenticationRequest.getEmail(),
+                    authenticationRequest.getUsername(), // Changed from getEmail to getUsername
                     authenticationRequest.getPassword()));
         } catch (BadCredentialsException e) {
             throw new BadCredentialsException("Incorrect username or password");
         }
-        final UserDetails userDetails = userService.userDetailsService().loadUserByUsername(authenticationRequest.getEmail());
-        Optional<User> optionalUser = userRepository.findFirstByEmail(authenticationRequest.getEmail());
+        final UserDetails userDetails = userService.userDetailsService().loadUserByUsername(authenticationRequest.getUsername()); // Changed from getEmail to getUsername
+        Optional<User> optionalUser = userRepository.findFirstByUsername(authenticationRequest.getUsername()); // Changed from findFirstByEmail
         final String jwtToken = jwtUtil.generateToken(userDetails);
         AuthenticationResponse authenticationResponse = new AuthenticationResponse();
         if (optionalUser.isPresent()) {

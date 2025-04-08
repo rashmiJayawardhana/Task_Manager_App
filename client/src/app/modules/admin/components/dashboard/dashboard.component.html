@@ -70,7 +70,12 @@
     <div class="task-grid" *ngIf="(listOfTasks?.length ?? 0) > 0 && !isLoading">
       <mat-card class="task-card" *ngFor="let task of paginatedTasks">
         <div class="task-details">
-          <h3 class="task-name">{{ task.title }}</h3>
+          <div class="task-name-wrapper">
+            <h3 class="task-name">{{ getTruncatedTitle(task.title, task.id) }}</h3>
+            <button *ngIf="task.title.length > 25" mat-button class="show-more-btn" (click)="toggleShowMore(task.id)">
+              {{ showFullTitle[task.id] ? 'Show Less' : 'Show More' }}
+            </button>
+          </div>
       
           <mat-divider></mat-divider>
           <div class="task-info">
