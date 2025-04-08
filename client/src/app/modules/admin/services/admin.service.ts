@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { StorageService } from '../../../auth/services/storage/storage.service';
 import { Employee } from '../../../shared/models/employee.model';
-import { TaskDto } from '../../../shared/models/task-dto.model';
+import { TaskDto, CreateTaskDto } from '../../../shared/models/task-dto.model';
 import { User } from '../../../shared/models/user.model';
 
 const BASE_URL = "http://localhost:8080/";
@@ -23,7 +23,7 @@ export class AdminService {
     });
   }
 
-  postTask(task: TaskDto): Observable<TaskDto> {
+  postTask(task: CreateTaskDto): Observable<TaskDto> {
     return this.http.post<TaskDto>(BASE_URL + "api/admin/task", task, {
       headers: this.createAuthorizationHeader(),
     });
@@ -41,7 +41,7 @@ export class AdminService {
     });
   }
 
-  updateTask(id: number, task: TaskDto): Observable<TaskDto> {
+  updateTask(id: number, task: CreateTaskDto): Observable<TaskDto> {
     return this.http.put<TaskDto>(`${BASE_URL}api/admin/task/${id}`, task, {
       headers: this.createAuthorizationHeader(),
     });

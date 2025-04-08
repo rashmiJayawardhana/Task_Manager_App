@@ -109,7 +109,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           taskStatus: task.taskStatus ?? 'UNKNOWN',
         }));
         this.updateTaskCounts();
-        this.currentPage = 0; // Reset to first page
+        this.currentPage = 0; 
         this.updatePaginatedTasks();
         this.isLoading = false;
       },
@@ -164,7 +164,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           duration: 5000,
           panelClass: ['success-snackbar'],
         });
-        this.getTasks(); // Refresh the task list from the backend
+        this.getTasks();
         this.isUpdating[taskId] = false;
       },
       error: (err) => {

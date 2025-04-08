@@ -11,9 +11,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AdminService } from '../../services/admin.service';
 import { Employee } from '../../../../shared/models/employee.model';
-import { TaskDto } from '../../../../shared/models/task-dto.model';
+import { TaskDto, CreateTaskDto } from '../../../../shared/models/task-dto.model';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'app-update-task',
@@ -105,11 +106,17 @@ export class UpdateTaskComponent implements OnInit {
   updateTask() {
     if (this.updateTaskForm.valid) {
       this.isUpdating = true;
-      const taskDto: TaskDto = {
-        ...this.updateTaskForm.value,
-        id: this.taskId,
-        dueDate: this.updateTaskForm.value.dueDate.toISOString().split('T')[0], // Format date as yyyy-MM-dd
+      const dueDate = this.updateTaskForm.value.dueDate;
+      const formattedDueDate = format(dueDate, "yyyy-MM-dd HH:mm:ss");
+      const taskDto: CreateTaskDto = { 
+        title: this.updateTaskForm.value.title,
+        description: this.updateTaskForm.value.description,
+        dueDate: formattedDueDate,
+        priority: this.updateTaskForm.value.priority,
+        taskStatus: this.updateTaskForm.value.taskStatus,
+        employeeId: this.updateTaskForm.value.employeeId,
       };
+      console.log('Task payload:', taskDto); 
       this.adminService.updateTask(this.taskId, taskDto).subscribe({
         next: () => {
           this.snackbar.open('Task updated successfully', 'Close', {

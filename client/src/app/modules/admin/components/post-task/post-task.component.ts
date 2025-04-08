@@ -11,8 +11,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AdminService } from '../../services/admin.service';
 import { Employee } from '../../../../shared/models/employee.model';
-import { TaskDto } from '../../../../shared/models/task-dto.model'; 
+import { TaskDto, CreateTaskDto } from '../../../../shared/models/task-dto.model'; 
 import { Router, RouterLink } from '@angular/router';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'app-post-task',
@@ -77,11 +78,17 @@ export class PostTaskComponent implements OnInit {
   postTask() {
     if (this.taskForm.valid) {
       this.isLoading = true;
-      const task: TaskDto = { 
-        ...this.taskForm.value,
-        dueDate: this.taskForm.value.dueDate.toISOString().split('T')[0], // Format as YYYY-MM-DD
-        taskStatus: 'INPROGRESS', // Match backend default
+      const dueDate = this.taskForm.value.dueDate;
+      const formattedDueDate = format(dueDate, "yyyy-MM-dd HH:mm:ss");
+      const task: CreateTaskDto = { // Use CreateTaskDto
+        employeeId: this.taskForm.value.employeeId,
+        title: this.taskForm.value.title,
+        description: this.taskForm.value.description,
+        dueDate: formattedDueDate,
+        priority: this.taskForm.value.priority,
+        taskStatus: 'INPROGRESS',
       };
+      console.log('Task payload:', task);
       this.adminService.postTask(task).subscribe({
         next: (res) => {
           console.log('Task posted successfully:', res);

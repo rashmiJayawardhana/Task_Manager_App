@@ -21,6 +21,10 @@
           <mat-divider></mat-divider>
           <div class="task-info">
             <div class="info-row">
+                <span class="info-label">Created At:</span>
+                <span class="info-value">{{ taskData.createdAt | date: 'MMM d, y, h:mm a' }}</span>
+            </div>
+            <div class="info-row">
               <span class="info-label">Due Date:</span>
               <span class="info-value">{{ taskData.dueDate | date: 'MMM d, y' }}</span>
             </div>

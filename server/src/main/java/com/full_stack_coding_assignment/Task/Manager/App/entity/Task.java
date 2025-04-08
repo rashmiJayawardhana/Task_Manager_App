@@ -7,7 +7,7 @@ import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -21,10 +21,13 @@ public class Task {
 
     private String description;
 
-    private Date dueDate;
+    private LocalDateTime createdAt;
+
+    private LocalDateTime dueDate;
 
     private String priority;
 
+    @Enumerated(EnumType.STRING)
     private TaskStatus taskStatus;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -32,4 +35,9 @@ public class Task {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private User user;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }

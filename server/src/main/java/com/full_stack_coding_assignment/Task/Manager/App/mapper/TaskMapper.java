@@ -13,6 +13,7 @@ public class TaskMapper {
         taskDto.setId(task.getId());
         taskDto.setTitle(task.getTitle());
         taskDto.setDescription(task.getDescription());
+        taskDto.setCreatedAt(task.getCreatedAt());
         taskDto.setDueDate(task.getDueDate());
         taskDto.setPriority(task.getPriority() != null ? task.getPriority() : "LOW");
         taskDto.setTaskStatus(task.getTaskStatus() != null ? task.getTaskStatus() : TaskStatus.INPROGRESS);
@@ -28,6 +29,7 @@ public class TaskMapper {
         task.setDueDate(taskDto.getDueDate());
         task.setPriority(taskDto.getPriority());
         task.setTaskStatus(taskDto.getTaskStatus());
+        // createdAt is not set here; it will be set automatically by @PrePersist
         return task;
     }
 }
