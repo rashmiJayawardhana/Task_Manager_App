@@ -208,6 +208,16 @@ ng serve
 - Frontend: http://localhost:4200
 - Backend: http://localhost:8080/api
 
+## 🗃️ Database Setup
+If using Docker, the database is automatically created based on .env:
+```env
+MYSQL_ROOT_PASSWORD=your_root_password
+MYSQL_DATABASE=task_manager_db
+MYSQL_APP_USER=app_user
+MYSQL_APP_PASSWORD=your_secure_password
+```
+If running manually, create the database and configure application.properties.
+
 ## 🔐 Credentials (JWT Auth)
 Use the following test credentials to log in (or register a new user):
 ```txt
