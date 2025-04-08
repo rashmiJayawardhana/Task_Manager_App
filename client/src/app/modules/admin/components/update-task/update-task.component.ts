@@ -126,7 +126,7 @@ export class UpdateTaskComponent implements OnInit, OnDestroy {
       const titleControl = this.updateTaskForm.get('title');
       if (titleControl?.hasError('maxlength') && titleControl.touched) {
         this.snackbar.open(
-          `Title exceeds maximum length of 50 characters (current: ${value?.length || 0})`,
+          `Title exceeds maximum length of 30 characters (current: ${value?.length || 0})`,
           'Close',
           {
             duration: 5000,
@@ -142,7 +142,7 @@ export class UpdateTaskComponent implements OnInit, OnDestroy {
       const descriptionControl = this.updateTaskForm.get('description');
       if (descriptionControl?.hasError('maxlength') && descriptionControl.touched) {
         this.snackbar.open(
-          `Description exceeds maximum length of 500 characters (current: ${value?.length || 0})`,
+          `Description exceeds maximum length of 200 characters (current: ${value?.length || 0})`,
           'Close',
           {
             duration: 5000,

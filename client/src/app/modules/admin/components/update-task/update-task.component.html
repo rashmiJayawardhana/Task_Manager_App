@@ -6,26 +6,26 @@
           <!-- Title -->
           <mat-form-field appearance="outline" class="form-field">
             <mat-label>Title</mat-label>
-            <input matInput type="text" formControlName="title" placeholder="Title" maxlength="50" />
+            <input matInput type="text" formControlName="title" placeholder="Title" maxlength="30" />
             <mat-hint [align]="'end'">{{ updateTaskForm.get('title')?.value?.length || 0 }}/30</mat-hint>
             <mat-error *ngIf="updateTaskForm.get('title')?.hasError('required') && updateTaskForm.get('title')?.touched">
               This field is required!
             </mat-error>
             <mat-error *ngIf="updateTaskForm.get('title')?.hasError('maxlength') && updateTaskForm.get('title')?.touched">
-              Title cannot exceed 50 characters (current: {{ updateTaskForm.get('title')?.value?.length || 0 }})
+              Title cannot exceed 30 characters (current: {{ updateTaskForm.get('title')?.value?.length || 0 }})
             </mat-error>
           </mat-form-field>
   
           <!-- Description -->
           <mat-form-field appearance="outline" class="form-field">
             <mat-label>Description</mat-label>
-            <textarea matInput formControlName="description" placeholder="Description" maxlength="500"></textarea>
+            <textarea matInput formControlName="description" placeholder="Description" maxlength="200"></textarea>
             <mat-hint [align]="'end'">{{ updateTaskForm.get('description')?.value?.length || 0 }}/200</mat-hint>
             <mat-error *ngIf="updateTaskForm.get('description')?.hasError('required') && updateTaskForm.get('description')?.touched">
               This field is required!
             </mat-error>
             <mat-error *ngIf="updateTaskForm.get('description')?.hasError('maxlength') && updateTaskForm.get('description')?.touched">
-              Description cannot exceed 500 characters (current: {{ updateTaskForm.get('description')?.value?.length || 0 }})
+              Description cannot exceed 200 characters (current: {{ updateTaskForm.get('description')?.value?.length || 0 }})
             </mat-error>
           </mat-form-field>
   

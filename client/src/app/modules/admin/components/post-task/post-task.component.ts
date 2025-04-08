@@ -95,12 +95,12 @@ export class PostTaskComponent implements OnInit, OnDestroy {
   setupValidationAlerts() {
     // Monitor title field for maxlength violation
     this.titleSubscription = this.taskForm.get('title')!.valueChanges.pipe(
-      debounceTime(300) // Debounce to avoid rapid alerts
+      debounceTime(300)
     ).subscribe(value => {
       const titleControl = this.taskForm.get('title');
       if (titleControl?.hasError('maxlength') && titleControl.touched) {
         this.snackbar.open(
-          `Title exceeds maximum length of 50 characters (current: ${value?.length || 0})`,
+          `Title exceeds maximum length of 30 characters (current: ${value?.length || 0})`,
           'Close',
           {
             duration: 5000,
@@ -117,7 +117,7 @@ export class PostTaskComponent implements OnInit, OnDestroy {
       const descriptionControl = this.taskForm.get('description');
       if (descriptionControl?.hasError('maxlength') && descriptionControl.touched) {
         this.snackbar.open(
-          `Description exceeds maximum length of 500 characters (current: ${value?.length || 0})`,
+          `Description exceeds maximum length of 200 characters (current: ${value?.length || 0})`,
           'Close',
           {
             duration: 5000,
