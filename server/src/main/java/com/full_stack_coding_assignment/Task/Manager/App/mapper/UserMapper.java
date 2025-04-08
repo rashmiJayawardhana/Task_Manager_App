@@ -16,6 +16,7 @@ public class UserMapper {
         userDto.setName(user.getName());
         userDto.setEmail(user.getEmail());
         userDto.setUserRole(user.getUserRole());
+        userDto.setProfileImage(user.getProfileImage() != null ? user.getProfileImage() : "default-profile.png");
         return userDto;
     }
 
@@ -27,8 +28,8 @@ public class UserMapper {
         user.setId(userDto.getId());
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
         user.setUserRole(userDto.getUserRole());
+        user.setProfileImage(userDto.getProfileImage());
         return user;
     }
 }

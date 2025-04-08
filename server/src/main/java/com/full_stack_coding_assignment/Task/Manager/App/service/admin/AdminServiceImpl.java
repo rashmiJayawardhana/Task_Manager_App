@@ -91,17 +91,6 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public TaskDto getTaskById(Long id) {
-        logger.info("Fetching task with ID: {}", id);
-        Optional<Task> optionalTask = taskRepository.findById(id);
-        if (optionalTask.isEmpty()) {
-            logger.error("Task with ID {} not found while fetching", id);
-            throw new TaskNotFoundException("Task with ID " + id + " not found");
-        }
-        return taskMapper.toTaskDto(optionalTask.get());
-    }
-
-    @Override
     public TaskDto updateTask(Long id, TaskDto taskDto) {
         logger.info("Updating task with ID: {}", id);
         Optional<Task> optionalTask = taskRepository.findById(id);
@@ -142,6 +131,32 @@ public class AdminServiceImpl implements AdminService {
                 .sorted(Comparator.comparing(Task::getDueDate, Comparator.nullsLast(Comparator.reverseOrder())))
                 .map(taskMapper::toTaskDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateUserProfileImage(Long userId, String imageName) {
+        logger.info("Updating profile image for user ID: {}", userId);
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty()) {
+            logger.error("User with ID {} not found while updating profile image", userId);
+            throw new UserNotFoundException("User with ID " + userId + " not found");
+        }
+
+        User user = optionalUser.get();
+        user.setProfileImage(imageName);
+        userRepository.save(user);
+        logger.info("Profile image updated for user ID: {}", userId);
+    }
+
+    @Override
+    public TaskDto getTaskById(Long id) {
+        logger.info("Fetching task with ID: {}", id);
+        Optional<Task> optionalTask = taskRepository.findById(id);
+        if (optionalTask.isEmpty()) {
+            logger.error("Task with ID {} not found while fetching", id);
+            throw new TaskNotFoundException("Task with ID " + id + " not found");
+        }
+        return taskMapper.toTaskDto(optionalTask.get());
     }
 
     @Override

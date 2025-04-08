@@ -13,6 +13,7 @@ import { AdminService } from '../../services/admin.service';
 import { Employee } from '../../../../shared/models/employee.model';
 import { TaskDto } from '../../../../shared/models/task-dto.model';
 import { RouterLink } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-update-task',
@@ -26,6 +27,7 @@ import { RouterLink } from '@angular/router';
     MatDatepickerModule,
     MatNativeDateModule,
     MatButtonModule,
+    MatCardModule,
     MatSnackBarModule,
     RouterLink,
   ],

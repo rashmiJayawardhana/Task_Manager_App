@@ -10,7 +10,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { EmployeeService } from '../../services/employee.service';
 import { TaskDto } from '../../../../shared/models/task-dto.model';
-
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,6 +25,7 @@ import { TaskDto } from '../../../../shared/models/task-dto.model';
     MatIconModule,
     MatTooltipModule,
     MatProgressSpinnerModule,
+    RouterLink
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],

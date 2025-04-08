@@ -11,6 +11,9 @@
 <!-- Admin navbar -->
 <div *ngIf="isAdminLoggedIn">
   <mat-toolbar color="primary" class="navbar">
+    <div class="profile-image-container">
+      <img *ngIf="userProfile?.profileImage" [src]="'http://localhost:8080/api/admin/images/' + userProfile.profileImage" alt="Profile Image" class="profile-image" [routerLink]="['/admin/profile']" />
+    </div>
     <span class="navbar-brand">Admin</span>
     <span class="spacer"></span>
     <button mat-button routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</button>
@@ -22,6 +25,9 @@
 <!-- Employee navbar -->
 <div *ngIf="isEmployeeLoggedIn">
   <mat-toolbar color="primary" class="navbar">
+    <div class="profile-image-container">
+      <img *ngIf="userProfile?.profileImage" [src]="'http://localhost:8080/api/admin/images/' + userProfile.profileImage" alt="Profile Image" class="profile-image" [routerLink]="['/employee/profile']" />
+    </div>
     <span class="navbar-brand">Employee</span>
     <span class="spacer"></span>
     <button mat-button routerLink="/employee/dashboard" routerLinkActive="active">Dashboard</button>

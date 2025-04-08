@@ -18,6 +18,7 @@ public class CommentMapper {
         commentDto.setTaskId(comment.getTask().getId());
         commentDto.setUserId(comment.getUser().getId());
         commentDto.setPostedBy(comment.getUser().getName());
+        commentDto.setProfileImage(comment.getUser().getProfileImage());
         return commentDto;
     }
 

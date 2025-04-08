@@ -22,6 +22,11 @@ const routes: Routes = [
     loadComponent: () =>
       import('./components/view-task-details/view-task-details.component').then((m) => m.ViewTaskDetailsComponent),
   },
+  {
+    path: 'profile',
+    loadComponent: () =>
+      import('../../shared/components/profile/profile.component').then((m) => m.ProfileComponent),
+  },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 ];
 

@@ -53,10 +53,15 @@
           </mat-error>
         </mat-form-field>
 
-        <button mat-raised-button class="post-button" type="submit" [disabled]="taskForm.invalid || isLoading">
-          <span *ngIf="!isLoading">Post Task</span>
-          <span *ngIf="isLoading">Posting...</span>
-        </button>
+        <div class="form-actions">
+          <button mat-raised-button class="post-button action-button" type="submit" [disabled]="taskForm.invalid || isLoading">
+            <span *ngIf="!isLoading">Post Task</span>
+            <span *ngIf="isLoading">Posting...</span>
+          </button>
+          <button mat-raised-button color="warn" class="action-button" type="button" [routerLink]="['/admin/dashboard']" [disabled]="isLoading">
+            Cancel
+          </button>
+        </div>
       </form>
     </mat-card-content>
   </mat-card>

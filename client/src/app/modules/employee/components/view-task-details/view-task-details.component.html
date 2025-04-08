@@ -82,7 +82,7 @@
           <div class="comment" *ngFor="let comment of comments">
             <div class="comment-header">
               <div class="comment-author-info">
-                <img *ngIf="comment.profileImage" [src]="'http://localhost:8080/api/admin/images/' + comment.profileImage" alt="Profile Image" class="profile-image" />
+                <img *ngIf="comment.profileImage" [src]="'http://localhost:8080/api/employee/images/' + comment.profileImage" alt="Profile Image" class="profile-image" />
                 <img *ngIf="!comment.profileImage" src="https://cdn-icons-png.flaticon.com/512/12225/12225935.png" alt="Default Profile Image" class="profile-image" />
                 <span class="comment-author">{{ comment.postedBy }}</span>
               </div>

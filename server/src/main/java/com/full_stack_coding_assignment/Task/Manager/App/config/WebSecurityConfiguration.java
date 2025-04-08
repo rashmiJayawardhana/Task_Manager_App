@@ -37,6 +37,7 @@ public class WebSecurityConfiguration {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/api/auth/**").permitAll() // Allow unauthenticated access to static resources
+                        .requestMatchers("/api/admin/images/**").permitAll()
                         .requestMatchers("/api/admin/**").hasAnyAuthority(UserRole.ADMIN.name())
                         .requestMatchers("/api/employee/**").hasAnyAuthority(UserRole.EMPLOYEE.name())
                         .anyRequest().authenticated())

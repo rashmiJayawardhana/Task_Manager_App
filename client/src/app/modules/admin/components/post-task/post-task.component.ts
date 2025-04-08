@@ -12,7 +12,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AdminService } from '../../services/admin.service';
 import { Employee } from '../../../../shared/models/employee.model';
 import { TaskDto } from '../../../../shared/models/task-dto.model'; 
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-post-task',
@@ -28,6 +28,7 @@ import { Router } from '@angular/router';
     MatButtonModule,
     MatCardModule,
     MatSnackBarModule,
+    RouterLink
   ],
   templateUrl: './post-task.component.html',
   styleUrls: ['./post-task.component.scss'],

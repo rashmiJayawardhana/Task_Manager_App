@@ -3,29 +3,51 @@
     align-items: center;
     padding: 0 16px;
     background: #009394;
-}
 
-.navbar-brand {
-    font-size: 20px;
-    font-weight: 600;
-    margin-right: 16px;
-    color: #ffffff;
-}
+    .profile-image-container {
+        margin-right: 10px;
+        margin-top: 4px;
+    
+        .profile-image {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          object-fit: cover;
+          cursor: pointer;
+          transition: transform 0.2s ease-in-out;
+    
+          &:hover {
+            transform: scale(1.1);
+          }
+        }
+    }
 
-.spacer {
-    flex: 1;
-}
 
-button {
-    color: #ffffff;
-    text-transform: uppercase;
-    margin-left: 8px;
-}
+    .navbar-brand {
+        font-size: 20px;
+        font-weight: 600;
+        margin-right: 16px;
+        color: #ffffff;
+    }
 
-button.active {
-    font-weight: 600;
-}
+    .spacer {
+        flex: 1 1 auto;
+    }
 
-.custom-toolbar {
-    background-color: #ff0000;
+    button {
+        color: #ffffff;
+        text-transform: uppercase;
+        margin-left: 10px;
+        font-size: 14px;
+
+        &.active {
+        font-weight: bold;
+        background-color: rgba(255, 255, 255, 0.1);
+        transition: transform 0.2s ease-in-out;
+        }
+
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
 }

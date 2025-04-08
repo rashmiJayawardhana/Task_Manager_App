@@ -1,8 +1,4 @@
 <div class="dashboard-header">
-    <h1>Employee Dashboard</h1>
-    <button mat-raised-button color="primary" (click)="getTasks()" [disabled]="isLoading">
-      <mat-icon>refresh</mat-icon> Refresh Tasks
-    </button>
   </div>
   
   <div class="task-list">
@@ -53,6 +49,12 @@
               </mat-select>
               <mat-spinner diameter="20" *ngIf="isUpdating[task.id]"></mat-spinner>
             </div>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="actions">
+            <button mat-icon-button color="accent" class="view-button" [routerLink]="['/employee/task-details', task.id]">
+              <mat-icon>visibility</mat-icon>
+            </button> 
           </div>
         </div>
       </div>

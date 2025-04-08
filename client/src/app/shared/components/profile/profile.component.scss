@@ -1,0 +1,67 @@
+.profile-card {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    text-align: center;
+    background: #006270;
+  
+    h2 {
+      font-size: 24px;
+      color: white;
+      margin-bottom: 20px;
+    }
+  
+    .profile-image-section {
+      margin-bottom: 20px;
+  
+      .profile-image {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #ddd;
+      }
+    }
+  
+    .profile-details {
+      margin-bottom: 20px;
+      text-align: left;
+  
+      p {
+        font-size: 16px;
+        color: #d8d8d8;
+        margin: 5px 0;
+  
+        strong {
+          color: white;
+          margin-right: 5px;
+        }
+      }
+    }
+  
+    .upload-section {
+      h3 {
+        font-size: 18px;
+        color: white;
+        margin-bottom: 10px;
+      }
+  
+      input[type="file"] {
+        margin-bottom: 15px;
+        display: block;
+        width: 100%;
+      }
+  
+      button {
+        padding: 8px 20px;
+        font-size: 14px;
+        transition: background-color 0.3s ease;
+        background: #00E0c7; 
+    color: #000000;
+  
+        &:hover {
+          background-color: #1565c0;
+        }
+      }
+    }
+  }

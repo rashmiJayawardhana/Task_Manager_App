@@ -1,20 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { AdminService } from '../../services/admin.service';
-import { ActivatedRoute} from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { EmployeeService } from '../../services/employee.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-view-task-details',
-  standalone: true,
   imports: [
     CommonModule,
     MatCardModule,
@@ -28,9 +27,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     ReactiveFormsModule,
   ],
   templateUrl: './view-task-details.component.html',
-  styleUrls: ['./view-task-details.component.scss']
+  styleUrl: './view-task-details.component.scss'
 })
-export class ViewTaskDetailsComponent implements OnInit {
+export class ViewTaskDetailsComponent {
   taskId!: number; // Use definite assignment assertion or initialize later
   taskData: any;
   comments: any[] = [];
@@ -39,7 +38,7 @@ export class ViewTaskDetailsComponent implements OnInit {
   error: string | null = null;
 
   constructor(
-    private service: AdminService,
+    private service: EmployeeService,
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private snackbar: MatSnackBar

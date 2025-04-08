@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { StorageService } from '../../../auth/services/storage/storage.service';
 import { Employee } from '../../../shared/models/employee.model';
 import { TaskDto } from '../../../shared/models/task-dto.model';
+import { User } from '../../../shared/models/user.model';
 
 const BASE_URL = "http://localhost:8080/";
 
@@ -40,12 +41,6 @@ export class AdminService {
     });
   }
 
-  getTaskById(id: number): Observable<TaskDto> {
-    return this.http.get<TaskDto>(`${BASE_URL}api/admin/task/${id}`, {
-      headers: this.createAuthorizationHeader(),
-    });
-  }
-
   updateTask(id: number, task: TaskDto): Observable<TaskDto> {
     return this.http.put<TaskDto>(`${BASE_URL}api/admin/task/${id}`, task, {
       headers: this.createAuthorizationHeader(),
@@ -58,11 +53,38 @@ export class AdminService {
     });
   }
 
+  getLoggedInUser(): Observable<User> {
+    return this.http.get<User>(`${BASE_URL}api/admin/me`, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
+  uploadImage(file: File): Observable<string> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<string>(`${BASE_URL}api/admin/upload-image`, formData, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
+  updateUserProfileImage(userId: number, imageName: string): Observable<string> {
+    return this.http.put<string>(`${BASE_URL}api/admin/user/${userId}/profile-image`, null, {
+      params: { imageName },
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
+  getTaskById(id: number): Observable<TaskDto> {
+    return this.http.get<TaskDto>(`${BASE_URL}api/admin/task/${id}`, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
   createComment(id: number, content: string): Observable<any> {
     const params = {
       content: content
     }
-    return this.http.post(`${BASE_URL}api/admin/task/comment/${id}`, null, {
+    return this.http.post(`${BASE_URL}api/admin/task/${id}/comment`, null, {
       params: params,
       headers: this.createAuthorizationHeader(),
     });

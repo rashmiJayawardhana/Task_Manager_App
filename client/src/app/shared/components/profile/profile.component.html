@@ -1,0 +1,21 @@
+<mat-card class="profile-card">
+  <mat-card-content>
+    <h2>Profile</h2>
+    <div class="profile-image-section">
+      <img *ngIf="userProfile?.profileImage" [src]="'http://localhost:8080/api/admin/images/' + userProfile!.profileImage" alt="Profile Image" class="profile-image" />
+      <img *ngIf="!userProfile?.profileImage" src="https://via.placeholder.com/100" alt="Default Profile Image" class="profile-image" />
+    </div>
+    <div class="profile-details">
+      <p><strong>Name:</strong> {{ userProfile?.name }}</p>
+      <p><strong>Email:</strong> {{ userProfile?.email }}</p>
+      <p><strong>Role:</strong> {{ userProfile?.userRole }}</p>
+    </div>
+    <div class="upload-section">
+      <h3>Update Profile Image</h3>
+      <input type="file" (change)="onFileSelected($event)" accept="image/*" />
+      <button mat-raised-button color="primary" (click)="uploadImage()" [disabled]="!selectedFile">
+        Upload Image
+      </button>
+    </div>
+  </mat-card-content>
+</mat-card>
