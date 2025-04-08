@@ -15,6 +15,8 @@ public interface EmployeeService {
 
     TaskDto getTaskById(Long id);
 
+    List<TaskDto> searchTaskByTitle(String title);
+
     CommentDto createComment(Long taskId, String content);
 
     List<CommentDto> getCommentsByTaskId(Long taskId);

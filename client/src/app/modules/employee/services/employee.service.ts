@@ -30,6 +30,12 @@ export class EmployeeService {
     );
   }
 
+  searchTask(title: string): Observable<TaskDto[]> {
+      return this.http.get<TaskDto[]>(`${BASE_URL}api/employee/tasks/search/${title}`, {
+        headers: this.createAuthorizationHeader(),
+      });
+  }
+
   getLoggedInUser(): Observable<User> {
     return this.http.get<User>(`${BASE_URL}api/employee/me`, {
       headers: this.createAuthorizationHeader(),

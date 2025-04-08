@@ -6,6 +6,10 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator'; // Added for pagination
 import { AdminService } from '../../services/admin.service';
 import { TaskDto } from '../../../../shared/models/task-dto.model';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -23,6 +27,10 @@ import { RouterLink } from '@angular/router';
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
+    MatProgressSpinnerModule,
+    MatButtonModule,
+    MatTooltipModule,
+    MatPaginatorModule, // Added
     ReactiveFormsModule,
     RouterLink,
   ],
@@ -31,10 +39,20 @@ import { RouterLink } from '@angular/router';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   listOfTasks: TaskDto[] | undefined;
+  paginatedTasks: TaskDto[] = []; // Tasks to display on the current page
+  taskCounts: { [key: string]: number } = {
+    PENDING: 0,
+    INPROGRESS: 0,
+    COMPLETED: 0,
+    DEFERRED: 0,
+    CANCELLED: 0,
+  };
   searchForm: FormGroup;
   isLoading = false;
   isDeleting: { [key: number]: boolean } = {};
   private destroy$ = new Subject<void>();
+  pageSize = 9; // Number of tasks per page
+  currentPage = 0; // Current page index
 
   constructor(
     private service: AdminService,
@@ -60,15 +78,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.searchForm
       .get('title')!
       .valueChanges.pipe(
-        debounceTime(300), // Wait 300ms after the last input
-        distinctUntilChanged(), // Only emit if the value has changed
+        debounceTime(300),
+        distinctUntilChanged(),
         takeUntil(this.destroy$)
       )
       .subscribe((title) => {
         if (title && title.trim().length > 0) {
           this.searchTask(title);
         } else {
-          this.getTasks(); // Reset to all tasks if search is cleared
+          this.getTasks();
         }
       });
   }
@@ -77,7 +95,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // Triggered on input, but the actual search is handled by the valueChanges subscription
   }
 
-  // Helper method to assign a numerical value to priority for sorting
   private getPriorityValue(priority: string | null | undefined): number {
     switch (priority?.toUpperCase()) {
       case 'HIGH':
@@ -87,11 +104,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
       case 'LOW':
         return 1;
       default:
-        return 0; // Handle unknown priorities (e.g., null or undefined)
+        return 0;
     }
   }
 
-  // Helper method to assign a numerical value to task status for sorting
   private getStatusValue(status: string | null | undefined): number {
     switch (status?.toUpperCase()) {
       case 'INPROGRESS':
@@ -105,31 +121,27 @@ export class DashboardComponent implements OnInit, OnDestroy {
       case 'COMPLETED':
         return 1;
       default:
-        return 0; // Handle unknown statuses
+        return 0;
     }
   }
 
-  // Helper method to sort tasks by priority, status, and due date
   private sortTasks(tasks: TaskDto[]): TaskDto[] {
     return tasks.sort((a, b) => {
-      // 1. Compare by priority (High > Medium > Low)
       const priorityA = this.getPriorityValue(a.priority);
       const priorityB = this.getPriorityValue(b.priority);
       if (priorityA !== priorityB) {
-        return priorityB - priorityA; // Descending order (High first)
+        return priorityB - priorityA;
       }
 
-      // 2. If priorities are equal, compare by task status (InProgress > Pending > Deferred > Cancelled > Completed)
       const statusA = this.getStatusValue(a.taskStatus);
       const statusB = this.getStatusValue(b.taskStatus);
       if (statusA !== statusB) {
-        return statusB - statusA; // Descending order (InProgress first)
+        return statusB - statusA;
       }
 
-      // 3. If statuses are equal, compare by due date (earliest first)
-      const dueDateA = a.dueDate ? new Date(a.dueDate).getTime() : Number.MAX_SAFE_INTEGER; // Handle null due dates
+      const dueDateA = a.dueDate ? new Date(a.dueDate).getTime() : Number.MAX_SAFE_INTEGER;
       const dueDateB = b.dueDate ? new Date(b.dueDate).getTime() : Number.MAX_SAFE_INTEGER;
-      return dueDateA - dueDateB; // Ascending order (earliest due date first)
+      return dueDateA - dueDateB;
     });
   }
 
@@ -143,8 +155,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
           priority: task.priority ?? 'UNKNOWN',
           taskStatus: task.taskStatus ?? 'UNKNOWN',
         }));
-        // Sort the tasks after mapping
         this.listOfTasks = this.sortTasks(this.listOfTasks);
+        this.updateTaskCounts();
+        this.updatePaginatedTasks();
         this.isLoading = false;
       },
       error: (err) => {
@@ -168,8 +181,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
           priority: task.priority ?? 'UNKNOWN',
           taskStatus: task.taskStatus ?? 'UNKNOWN',
         }));
-        // Sort the tasks after mapping
         this.listOfTasks = this.sortTasks(this.listOfTasks);
+        this.updateTaskCounts();
+        this.currentPage = 0; // Reset to first page on search
+        this.updatePaginatedTasks();
         this.isLoading = false;
       },
       error: (err) => {
@@ -179,9 +194,33 @@ export class DashboardComponent implements OnInit, OnDestroy {
           panelClass: ['error-snackbar'],
         });
         this.listOfTasks = [];
+        this.updateTaskCounts();
+        this.updatePaginatedTasks();
         this.isLoading = false;
       },
     });
+  }
+
+  private updateTaskCounts() {
+    this.taskCounts = {
+      PENDING: 0,
+      INPROGRESS: 0,
+      COMPLETED: 0,
+      DEFERRED: 0,
+      CANCELLED: 0,
+    };
+    if (this.listOfTasks) {
+      this.listOfTasks.forEach(task => {
+        const status = task.taskStatus?.toUpperCase();
+        if (status && this.taskCounts.hasOwnProperty(status)) {
+          this.taskCounts[status]++;
+        }
+      });
+    }
+  }
+
+  getTaskCount(status: string): number {
+    return this.taskCounts[status.toUpperCase()] || 0;
   }
 
   deleteTask(id: number) {
@@ -214,5 +253,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   getStatusClass(status: string | null | undefined): string {
     return `status-${(status ?? 'unknown').toLowerCase()}`;
+  }
+
+  // Pagination logic
+  private updatePaginatedTasks() {
+    if (!this.listOfTasks) {
+      this.paginatedTasks = [];
+      return;
+    }
+    const startIndex = this.currentPage * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.paginatedTasks = this.listOfTasks.slice(startIndex, endIndex);
+  }
+
+  onPageChange(event: PageEvent) {
+    this.currentPage = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.updatePaginatedTasks();
   }
 }

@@ -37,21 +37,26 @@ export class AppComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.updateLoginStatus();
-    this.fetchUserProfile();
-    ProfileComponent.profileUpdated.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      this.fetchUserProfile(); // Refresh the profile image in the navbar
-    });
+    // Subscribe to login state changes
+    this.storageService.getLoginState()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(({ isAdmin, isEmployee }) => {
+        this.isAdminLoggedIn = isAdmin;
+        this.isEmployeeLoggedIn = isEmployee;
+        this.fetchUserProfile(); // Fetch the user profile whenever the login state changes
+      });
+
+    // Subscribe to profile updates
+    ProfileComponent.profileUpdated
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.fetchUserProfile(); // Refresh the profile image in the navbar
+      });
   }
 
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  updateLoginStatus() {
-    this.isAdminLoggedIn = this.storageService.isAdminLoggedIn();
-    this.isEmployeeLoggedIn = this.storageService.isEmployeeLoggedIn();
   }
 
   fetchUserProfile() {
@@ -73,13 +78,13 @@ export class AppComponent implements OnInit, OnDestroy {
           console.error('Error fetching employee profile:', err);
         }
       });
+    } else {
+      this.userProfile = null; // Clear the user profile if not logged in
     }
   }
 
   logout() {
     this.storageService.logout();
-    this.updateLoginStatus();
-    this.userProfile = null;
     this.router.navigateByUrl('/login');
   }
 }

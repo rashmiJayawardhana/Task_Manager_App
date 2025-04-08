@@ -1,167 +1,373 @@
-.search-form {
+.status-summary {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+    gap: 20px;
+    flex-wrap: wrap;
+  
+    .status-card {
+      width: 200px; // Fixed width for uniformity
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+      text-align: center;
+      transition: transform 0.2s ease-in-out;
+  
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      }
+  
+      mat-card-content {
+        padding: 20px;
+        display: flex;
+        flex-direction: column; // Stack status-header and count vertically
+        align-items: center;
+  
+        .status-header {
+          display: flex;
+          flex-direction: row; // Icon and h3 side by side
+          align-items: center;
+          gap: 8px; // Space between icon and h3
+          margin-bottom: 10px;
+  
+          mat-icon {
+            font-size: 24px;
+            width: 24px;
+            height: 24px;
+            color: inherit; // Inherit color from h3
+          }
+  
+          h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0;
+          }
+        }
+  
+        p {
+          font-size: 24px;
+          font-weight: bold;
+          margin: 0;
+        }
+      }
+  
+      &.status-pending {
+        h3,
+        mat-icon {
+          color: #e65100; // Darker orange for better contrast
+        }
+      }
+  
+      &.status-inprogress {
+        h3,
+        mat-icon {
+          color: #0288d1;
+        }
+      }
+  
+      &.status-completed {
+        h3,
+        mat-icon {
+          color: #388e3c;
+        }
+      }
+  
+      &.status-deferred {
+        h3,
+        mat-icon {
+          color: #e65100; // Darker orange for better contrast
+        }
+      }
+  
+      &.status-cancelled {
+        h3,
+        mat-icon {
+          color: #d32f2f;
+        }
+      }
+    }
+  }
+  
+  .content-wrapper {
+    max-width: 1200px;
+    margin: 20px auto;
+    margin-bottom: 40px; // Added space below the content wrapper
+    padding: 20px;
+    background: #006270;
+    border-radius: 10px;
+  }
+  
+  .search-form {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 20px;
-
+    margin-bottom: 20px;
+  
     .search-input {
-        width: 300px;
-        margin-right: 15px;
-
-        input {
-            padding-right: 40px;
-        }
+      width: 300px;
+      margin-right: 15px;
+  
+      input {
+        padding-right: 40px;
+      }
     }
-}
-
-.task-list {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
+  }
+  
+  .task-list {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 20px;
-    justify-content: space-between;
     min-height: 37vh;
-
-    .loading,
+  
+    .loading {
+      text-align: center;
+      width: 100%;
+      color: #666;
+      font-size: 18px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+  
+      mat-spinner {
+        margin: 0 auto;
+      }
+    }
+  
     .empty-state {
-        text-align: center;
-        width: 100%;
-        color: #666;
-        font-size: 18px;
-        padding: 20px;
+      text-align: center;
+      width: 100%;
+      color: #e0e0e0;
+      font-size: 18px;
+      padding: 20px;
+  
+      button {
+        margin-top: 10px;
+        background: #00E0c7; 
+        color: #000000 
+      }
     }
-
+  
+    .task-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: space-between;
+    }
+  
     .task-card {
-        width: calc(33.33% - 20px);
-        margin-bottom: 20px;
-        max-width: 350px;
-        background: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-        transition: transform 0.2s ease-in-out;
-
-        &:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      width: calc(33.33% - 20px);
+      margin-bottom: 20px;
+      max-width: 350px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+      transition: transform 0.2s ease-in-out;
+  
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      }
+  
+      .task-details {
+        padding: 20px;
+  
+        .task-name {
+          font-size: 20px;
+          font-weight: 600;
+          color: #333;
+          margin-bottom: 10px;
         }
-
-        .task-details {
-            padding: 20px;
-
-            .task-name {
-                font-size: 20px;
+  
+        .task-info {
+          margin-top: 15px;
+  
+          .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+  
+            .info-label {
+              font-weight: 500;
+              color: #555;
+            }
+  
+            .info-value {
+              color: #333;
+              font-weight: bold;
+  
+              &.priority-high {
+                color: #d32f2f; // Red for HIGH priority
                 font-weight: 600;
-                color: #333;
-                margin-bottom: 10px;
+              }
+  
+              &.priority-medium {
+                color: #f57c00; // Orange for MEDIUM priority
+                font-weight: 600;
+              }
+  
+              &.priority-low {
+                color: #388e3c; // Green for LOW priority
+                font-weight: 600;
+              }
+  
+              &.priority-unknown {
+                color: #999; // Gray for unknown priority
+                font-weight: 600;
+              }
+  
+              &.status-completed {
+                color: #388e3c; // Green for COMPLETED status
+                font-weight: 600;
+              }
+  
+              &.status-inprogress {
+                color: #0288d1; // Blue for INPROGRESS status
+                font-weight: 600;
+              }
+  
+              &.status-pending {
+                color: #f57c00; // Orange for PENDING status
+                font-weight: 600;
+              }
+  
+              &.status-deferred {
+                color: #f57c00; // Orange for DEFERRED status
+                font-weight: 600;
+              }
+  
+              &.status-cancelled {
+                color: #d32f2f; // Red for CANCELLED status
+                font-weight: 600;
+              }
+  
+              &.status-unknown {
+                color: #999; // Gray for unknown status
+                font-weight: 600;
+              }
             }
-
-            .task-description {
-                font-size: 14px;
-                color: #666;
-                margin-bottom: 15px;
-                line-height: 1.5;
+          }
+  
+          .actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+  
+            .view-button {
+              margin-right: 10px;
+              color: #6a1b9a; // Darker purple for view button (previously accent)
             }
-
-            .task-info {
-                margin-top: 15px;
-
-                .info-row {
-                    display: flex;
-                    justify-content: space-between;
-                    margin-bottom: 10px;
-                    font-size: 14px;
-
-                    .info-label {
-                        font-weight: 500;
-                        color: #555;
-                    }
-
-                    .info-value {
-                        color: #333;
-                        font-weight: bold;
-
-                        &.priority-high {
-                            color: #d32f2f; // Red for HIGH priority
-                            font-weight: 600;
-                        }
-
-                        &.priority-medium {
-                            color: #f57c00; // Orange for MEDIUM priority
-                            font-weight: 600;
-                        }
-
-                        &.priority-low {
-                            color: #388e3c; // Green for LOW priority
-                            font-weight: 600;
-                        }
-
-                        &.priority-unknown {
-                            color: #999; // Gray for unknown priority
-                            font-weight: 600;
-                        }
-
-                        &.status-completed {
-                            color: #388e3c; // Green for COMPLETED status
-                            font-weight: 600;
-                        }
-
-                        &.status-inprogress {
-                            color: #0288d1; // Blue for INPROGRESS status
-                            font-weight: 600;
-                        }
-
-                        &.status-pending {
-                            color: #f57c00; // Orange for PENDING status
-                            font-weight: 600;
-                        }
-
-                        &.status-deferred {
-                            color: #f57c00; // Orange for DEFERRED status
-                            font-weight: 600;
-                        }
-
-                        &.status-cancelled {
-                            color: #d32f2f; // Red for CANCELLED status
-                            font-weight: 600;
-                        }
-
-                        &.status-unknown {
-                            color: #999; // Gray for unknown status
-                            font-weight: 600;
-                        }
-                    }
-                }
-
-                .actions {
-                    display: flex;
-                    justify-content: flex-end;
-                    margin-top: 10px;
-
-                    .view-button{
-                        margin-right: 10px;
-                    }
-
-                    .update-button {
-                        margin-right: 10px;
-                    }
-
-                    .delete-button {
-                        margin-right: 10px;
-                    }
-                }
+  
+            .update-button {
+              margin-right: 10px;
+              color: #01579b; // Darker blue for edit button (previously primary)
             }
+  
+            .delete-button {
+              margin-right: 10px;
+              color: #b71c1c; // Darker red for delete button (previously warn)
+            }
+          }
         }
+      }
     }
-}
-
-@media (max-width: 600px) {
+  
+    mat-paginator {
+      margin-top: 20px;
+      background: #ffffff;
+      color: black;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  
+      .mat-paginator-navigation-previous,
+      .mat-paginator-navigation-next {
+        color: #151515 !important; 
+      }
+  
+      .mat-paginator-navigation-previous:hover,
+      .mat-paginator-navigation-next:hover {
+        color: #000 !important;
+      }
+  
+      .mat-paginator-navigation-previous:disabled,
+      .mat-paginator-navigation-next:disabled {
+        color: #7b7979 !important; 
+      }
+    }
+  }
+  
+  @media (max-width: 900px) {
+    .status-summary {
+      .status-card {
+        width: 120px; 
+  
+        mat-card-content {
+          padding: 10px;
+  
+          .status-header {
+            gap: 6px;
+  
+            mat-icon {
+              font-size: 20px;
+              width: 20px;
+              height: 20px;
+            }
+  
+            h3 {
+              font-size: 14px;
+            }
+          }
+  
+          p {
+            font-size: 20px;
+          }
+        }
+      }
+    }
+  
     .task-list {
-        padding: 10px;
-
-        .task-card {
-            max-width: 100%;
-        }
+      .task-card {
+        width: calc(50% - 20px); 
+      }
     }
-}
+  }
+  
+  @media (max-width: 600px) {
+    .status-summary {
+      flex-direction: column;
+      align-items: center;
+  
+      .status-card {
+        width: 100%;
+        max-width: 300px;
+        margin-bottom: 10px;
+      }
+    }
+  
+    .task-list {
+      padding: 10px;
+  
+      .task-card {
+        width: 100%; 
+        max-width: none;
+      }
+    }
+  
+    .content-wrapper {
+      padding: 10px;
+      margin-bottom: 20px; 
+    }
+  
+    .search-form {
+      .search-input {
+        width: 100%;
+        max-width: 300px;
+      }
+    }
+  }

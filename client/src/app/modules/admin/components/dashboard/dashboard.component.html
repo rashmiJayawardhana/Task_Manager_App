@@ -1,60 +1,125 @@
-<form class="search-form" [formGroup]="searchForm">
-    <mat-form-field appearance="outline" class="search-input">
-        <mat-label>Enter keyword to search</mat-label>
-        <input matInput formControlName="title" (input)="onSearchInput()">
-    </mat-form-field>
-</form>
+<!-- Task Status Summary Cards -->
+<div class="status-summary">
+  <mat-card class="status-card status-pending">
+    <mat-card-content>
+      <div class="status-header">
+        <mat-icon>schedule</mat-icon>
+        <h3>Pending</h3>
+      </div>
+      <p>{{ taskCounts['PENDING'] }}</p>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="status-card status-inprogress">
+    <mat-card-content>
+      <div class="status-header">
+        <mat-icon>play_circle</mat-icon>
+        <h3>In Progress</h3>
+      </div>
+      <p>{{ taskCounts['INPROGRESS'] }}</p>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="status-card status-completed">
+    <mat-card-content>
+      <div class="status-header">
+        <mat-icon>check_circle</mat-icon>
+        <h3>Completed</h3>
+      </div>
+      <p>{{ taskCounts['COMPLETED'] }}</p>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="status-card status-deferred">
+    <mat-card-content>
+      <div class="status-header">
+        <mat-icon>pause_circle</mat-icon>
+        <h3>Deferred</h3>
+      </div>
+      <p>{{ taskCounts['DEFERRED'] }}</p>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="status-card status-cancelled">
+    <mat-card-content>
+      <div class="status-header">
+        <mat-icon>cancel</mat-icon>
+        <h3>Cancelled</h3>
+      </div>
+      <p>{{ taskCounts['CANCELLED'] }}</p>
+    </mat-card-content>
+  </mat-card>
+</div>
 
-<div class="task-list">
-    <div class="loading" *ngIf="listOfTasks === undefined">
+<!-- Search Form and Task List -->
+<div class="content-wrapper">
+  <form class="search-form" [formGroup]="searchForm">
+    <mat-form-field appearance="outline" class="search-input">
+      <mat-label>Search tasks by title...</mat-label>
+      <input matInput formControlName="title" (input)="onSearchInput()">
+    </mat-form-field>
+  </form>
+
+  <div class="task-list">
+    <div class="loading" *ngIf="isLoading">
+      <mat-spinner diameter="40"></mat-spinner>
       <p>Loading tasks...</p>
     </div>
-  
-    <div class="empty-state" *ngIf="listOfTasks?.length === 0">
+
+    <div class="empty-state" *ngIf="(listOfTasks?.length ?? 0) === 0 && !isLoading">
       <p>No tasks available.</p>
+      <button mat-raised-button color="primary" [routerLink]="['/admin/task']">Create a New Task</button>
     </div>
-  
-    <mat-card class="task-card" *ngFor="let task of listOfTasks">
-      <div class="task-details">
-        <h2 class="task-name">{{ task.title }}</h2>
-        <p class="task-description">{{ task.description }}</p>
-  
-        <mat-divider></mat-divider>
-        <div class="task-info">
-          <div class="info-row">
-            <span class="info-label">Due Date:</span>
-            <span class="info-value">{{ task.dueDate | date: 'MMM d, y' }}</span>
+
+    <div class="task-grid" *ngIf="(listOfTasks?.length ?? 0) > 0 && !isLoading">
+      <mat-card class="task-card" *ngFor="let task of paginatedTasks">
+        <div class="task-details">
+          <h3 class="task-name">{{ task.title }}</h3>
+      
+          <mat-divider></mat-divider>
+          <div class="task-info">
+            <div class="info-row">
+              <span class="info-label">Due Date:</span>
+              <span class="info-value">{{ task.dueDate | date: 'MMM d, y' }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Employee:</span>
+              <span class="info-value">{{ task.employeeName }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Priority:</span>
+              <span class="info-value" [ngClass]="getPriorityClass(task.priority)">
+                {{ task.priority }}
+              </span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Status:</span>
+              <span class="info-value" [ngClass]="getStatusClass(task.taskStatus)">
+                {{ task.taskStatus }}
+              </span>
+            </div>
           </div>
-          <div class="info-row">
-            <span class="info-label">Employee:</span>
-            <span class="info-value">{{ task.employeeName }}</span>
-          </div>
-          <div class="info-row">
-            <span class="info-label">Priority:</span>
-            <span class="info-value" [ngClass]="getPriorityClass(task.priority)">
-              {{ task.priority }}
-            </span>
-          </div>
-          <div class="info-row">
-            <span class="info-label">Status:</span>
-            <span class="info-value" [ngClass]="getStatusClass(task.taskStatus)">
-              {{ task.taskStatus }}
-            </span>
+      
+          <mat-divider></mat-divider>
+          <div class="actions">
+            <button mat-icon-button color="accent" class="view-button" [routerLink]="['/admin/task-details', task.id]" matTooltip="View Task" aria-label="View task details">
+              <mat-icon>visibility</mat-icon>
+            </button> 
+            <button mat-icon-button color="primary" class="update-button" [routerLink]="['/admin/task', task.id, 'update']" matTooltip="Edit Task" aria-label="Edit task">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" class="delete-button" (click)="deleteTask(task.id)" [disabled]="isDeleting[task.id]" matTooltip="Delete Task" aria-label="Delete task">
+              <mat-icon>{{ isDeleting[task.id] ? 'hourglass_empty' : 'delete' }}</mat-icon>
+            </button>
           </div>
         </div>
-  
-        <mat-divider></mat-divider>
-        <div class="actions">
-          <button mat-icon-button color="accent" class="view-button" [routerLink]="['/admin/task-details', task.id]">
-            <mat-icon>visibility</mat-icon>
-          </button> 
-          <button mat-icon-button color="primary" class="update-button" [routerLink]="['/admin/task', task.id, 'update']">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button color="warn" class="delete-button" (click)="deleteTask(task.id)" [disabled]="isDeleting[task.id]">
-            <mat-icon>{{ isDeleting[task.id] ? 'hourglass_empty' : 'delete' }}</mat-icon>
-          </button>
-        </div>
-      </div>
-    </mat-card>
+      </mat-card>
+    </div>
+
+    <!-- Pagination -->
+    <mat-paginator
+      *ngIf="(listOfTasks?.length ?? 0) > 0 && !isLoading"
+      [length]="listOfTasks?.length ?? 0"
+      [pageSize]="9"
+      [pageSizeOptions]="[9]"
+      (page)="onPageChange($event)"
+      aria-label="Select page of tasks">
+    </mat-paginator>
+  </div>
 </div>

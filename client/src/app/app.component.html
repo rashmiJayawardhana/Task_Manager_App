@@ -13,6 +13,7 @@
   <mat-toolbar color="primary" class="navbar">
     <div class="profile-image-container">
       <img *ngIf="userProfile?.profileImage" [src]="'http://localhost:8080/api/admin/images/' + userProfile.profileImage" alt="Profile Image" class="profile-image" [routerLink]="['/admin/profile']" />
+      <img *ngIf="!userProfile?.profileImage" src="https://cdn-icons-png.flaticon.com/512/12225/12225935.png" alt="Default Profile Image" class="profile-image" [routerLink]="['/admin/profile']" />
     </div>
     <span class="navbar-brand">Admin</span>
     <span class="spacer"></span>
@@ -27,6 +28,7 @@
   <mat-toolbar color="primary" class="navbar">
     <div class="profile-image-container">
       <img *ngIf="userProfile?.profileImage" [src]="'http://localhost:8080/api/admin/images/' + userProfile.profileImage" alt="Profile Image" class="profile-image" [routerLink]="['/employee/profile']" />
+      <img *ngIf="!userProfile?.profileImage" src="https://cdn-icons-png.flaticon.com/512/12225/12225935.png" alt="Default Profile Image" class="profile-image" [routerLink]="['/employee/profile']" />
     </div>
     <span class="navbar-brand">Employee</span>
     <span class="spacer"></span>

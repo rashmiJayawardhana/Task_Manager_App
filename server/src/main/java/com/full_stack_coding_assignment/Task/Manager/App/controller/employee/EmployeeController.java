@@ -92,4 +92,9 @@ public class EmployeeController {
     public ResponseEntity<List<CommentDto>> getCommentsByTaskId(@PathVariable Long taskId) {
         return ResponseEntity.ok(employeeService.getCommentsByTaskId(taskId));
     }
+
+    @GetMapping("/tasks/search/{title}")
+    public ResponseEntity<List<TaskDto>> searchTask(@PathVariable String title) {
+        return ResponseEntity.ok(employeeService.searchTaskByTitle(title));
+    }
 }

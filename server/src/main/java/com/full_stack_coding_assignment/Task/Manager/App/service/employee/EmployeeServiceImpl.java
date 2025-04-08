@@ -127,6 +127,21 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public List<TaskDto> searchTaskByTitle(String title) {
+        if (title == null || title.trim().isEmpty()) {
+            logger.warn("Search title is null or empty, returning empty list");
+            return List.of();
+        }
+
+        logger.info("Searching tasks with title containing: {}", title);
+        return taskRepository.findAllByTitleContaining(title)
+                .stream()
+                .sorted(Comparator.comparing(Task::getDueDate, Comparator.nullsLast(Comparator.reverseOrder())))
+                .map(taskMapper::toTaskDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public CommentDto createComment(Long taskId, String content) {
         if (content == null || content.trim().isEmpty()) {
             logger.error("Comment content cannot be empty for task ID: {}", taskId);
