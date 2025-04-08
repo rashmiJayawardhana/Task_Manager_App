@@ -54,6 +54,28 @@ The application is built with a modern tech stack and follows best practices for
 - **Authentication**: JSON Web Tokens (JWT)
 - **Containerization**: Docker, Docker Compose
 - **Version Control**: Git, GitHub
+![Screenshot (190)](https://github.com/user-attachments/assets/24bbb6ec-16b3-4fcd-9f8c-664607353bb4)
+
+![Screenshot (194)](https://github.com/user-attachments/assets/2c3df6a5-3607-429a-a2a3-0aeac27a7fff)
+
+
+![Screenshot (193)](https://github.com/user-attachments/assets/b81c05de-71c8-4e32-b776-aced82c84311)
+
+![Screenshot (195)](https://github.com/user-attachments/assets/8db091d3-3db2-4556-af03-d800c3a4e0b6)
+
+![Screenshot (191)](https://github.com/user-attachments/assets/9cf74677-b1dd-4677-b9ec-f5277342ae9d)
+![Screenshot (192)](https://github.com/user-attachments/assets/ebbe5f87-bcb0-4e35-9398-cf3437b1e3bf)
+![Screenshot (196)](https://github.com/user-attachments/assets/1d7b7828-91c9-4297-a0ba-af0053a045f6)
+
+![Screenshot (195)](https://github.com/user-attachments/assets/54a80011-200d-4685-80c9-e4ece2cd9515)
+
+
+
+
+
+
+
+
 
 ## 📦 Prerequisites
 
