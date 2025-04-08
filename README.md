@@ -117,20 +117,13 @@ Task_Manager_App/
 
 ## 🚀 Getting Started
 
-### ✅ Prerequisites
+### Option 1: Run with Docker (Recommended)
 
-Ensure you have the following installed:
-- [Node.js (v16+)](https://nodejs.org/)
-- [Angular CLI](https://angular.io/cli): `npm install -g @angular/cli`
-- [Java JDK 17+](https://www.oracle.com/java/)
-- [Maven](https://maven.apache.org/)
-- [MySQL](https://dev.mysql.com/downloads/)
-- [Docker](https://www.docker.com/get-started)
-- [Git](https://git-scm.com/)
+#### 🧬 Prerequisites
+- Docker & Docker Compose
+- Git
 
----
-
-## ⚙️ Setup Instructions
+#### 🧾 Steps
 
 ### Option 1: Run with Docker Compose (Recommended)
 
@@ -147,19 +140,20 @@ cp .env.example .env
 ```
 
 ### Example .env
-##### Docker Compose settings
-#### COMPOSE_BAKE=true
+```env
+# Docker Compose settings
+COMPOSE_BAKE=true
 
-##### MySQL settings
-#### MYSQL_ROOT_PASSWORD="1234Rashmi2001#"
-#### MYSQL_DATABASE=task_manager_db
-#### MYSQL_APP_USER=app_user
-#### MYSQL_APP_PASSWORD="SecurePass2025!"
+# MySQL settings
+MYSQL_ROOT_PASSWORD="1234Rashmi2001#"
+MYSQL_DATABASE=task_manager_db
+MYSQL_APP_USER=app_user
+MYSQL_APP_PASSWORD="SecurePass2025!"
 
-##### Application settings
-#### BACKEND_PORT=8080
-#### FRONTEND_PORT=80
-
+# Application settings
+BACKEND_PORT=8080
+FRONTEND_PORT=80
+```
 
 ### 3. Run the Application
 ```bash
@@ -176,6 +170,13 @@ docker-compose down
 ```
 
 ### Option 2: Run Locally (Without Docker)
+
+#### 🧬 Prerequisites
+- Node.js + Angular CLI
+- Java 17 + Maven
+- MySQL Server
+
+#### 🧾 Steps
 ### 1.Clone the Repository
 ```bash
 git clone https://github.com/your-username/task-manager-app.git
@@ -209,12 +210,25 @@ ng serve
 - Frontend: http://localhost:4200
 - Backend: http://localhost:8080/api
 
+## 🔐 Credentials (JWT Auth)
+Use the following test credentials to log in (or register a new user):
+```txt
+Admin User:
+username : admin
+Password: admin
+```
+Once logged in, a JWT token will be stored in the browser and attached to all protected API requests.
 
-## Resources
+## 📚 Resources
 - Angular Docs
+
 - Spring Boot Docs
+
+- JWT.io
+
 - Docker Docs
-- JWT Authentication
+
+- MySQL Docs
 
 
 
